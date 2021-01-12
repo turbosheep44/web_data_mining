@@ -1,24 +1,9 @@
-# web_data_mining
+# WAP Data Mining
 
-## Project setup
-```
-yarn install
-```
+## Development Setup
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+Clone this repository and install the extensions for VS Code: Vetur, ESLint and Prettier.
 
-### Compiles and minifies for production
-```
-yarn build
-```
+To install all packages for the first time run `yarn install`.
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+To compile and hot-reload for development run `yarn serve`.
