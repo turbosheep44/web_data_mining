@@ -27,7 +27,10 @@
           <div class="d-flex justify-content-center align-items-center">
             <b-button squared variant="outline-danger" class="mx-1 px-2" @click="stock.owned -= 5">Sell 5</b-button>
             <b-button squared variant="outline-danger" class="mx-1 px-2" @click="stock.owned--">Sell 1</b-button>
-            <span class="mx-2">{{ stock.owned }}</span>
+            <span class="mx-1 text-center">
+              {{ stock.owned }} <br />
+              €{{ stock.owned * stock.value[stock.value.length - 1] }}
+            </span>
             <b-button squared variant="outline-success" class="mx-1 px-2" @click="stock.owned++">Buy 1</b-button>
             <b-button squared variant="outline-success" class="mx-1 px-2" @click="stock.owned += 5">Buy 5</b-button>
           </div>
