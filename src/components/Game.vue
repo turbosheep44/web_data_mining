@@ -1,12 +1,8 @@
 <template>
   <div>
-    <b-card no-body>
-      <b-tabs card>
-        <b-tab title="Leisure" active><p>I'm the leisure tab!</p></b-tab>
-        <b-tab title="Home"><p>I'm the home tab!</p></b-tab>
-        <b-tab title="Work"><p>I'm the work tab!</p></b-tab>
-      </b-tabs>
-    </b-card>
+    <Status />
+    <Tabs />
+    <DevTools />
   </div>
 </template>
 
@@ -15,10 +11,25 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Tabs from '@/components/Tabs.vue'
+import Status from '@/components/Status.vue'
+import DevTools from '@/components/DevTools.vue'
 
-@Component({})
+@Component({
+  components: { Tabs, Status, DevTools },
+})
 export default class Game extends Vue {
-  private age: number = 2
+  private tick: number
+
+  created() {
+    this.tick = setInterval(() => {
+      this.$store.events.$emit('tick')
+    }, 1000)
+  }
+
+  beforeDestroy() {
+    clearInterval(this.tick)
+  }
 }
 </script>
 
