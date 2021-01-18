@@ -5,10 +5,10 @@
     {{ date() }}
     <br />
     <div class="d-flex justify-content-between">
-      <div ref="counters" class="counter active"></div>
-      <div ref="counters" class="counter active"></div>
-      <div ref="counters" class="counter"></div>
-      <div ref="counters" class="counter"></div>
+      <div ref="counters" class="counter" v-bind:class="currentWeek() == 0 ? 'active' : ''"></div>
+      <div ref="counters" class="counter" v-bind:class="currentWeek() == 1 ? 'active' : ''"></div>
+      <div ref="counters" class="counter" v-bind:class="currentWeek() == 2 ? 'active' : ''"></div>
+      <div ref="counters" class="counter" v-bind:class="currentWeek() == 3 ? 'active' : ''"></div>
     </div>
   </div>
 </template>
@@ -25,16 +25,30 @@ export default class Time extends Vue {
 
   created() {
     this.$store.events.$on('tick', this.onTick)
-    this.$store.events.$on('tick', this.weekCounter)
   }
 
   onTick() {
     this.$store.tickCount++
+    if(this.currentWeek() % 4 == 0){
+      this.$store.events.$emit('month_passed')
+    }
+
+    if(this.$store.jobSearchTargetTick != -1 && this.$store.jobSearchTargetTick == this.$store.tickCount)
+      this.$store.events.$emit('jobs_found')
   }
 
+  currentWeek(){
+    return this.$store.tickCount % 4
+  }
+  
+
   weekCounter() {
+    this.counters.forEach(function(item){
+      console.log('nnn', item)
+    })
     console.log(this.counters)
     console.log(this.$refs.counters)
+
     const i = this.counters.findIndex((counter) => {
       return !counter.classList.contains('active')
     })
