@@ -1,14 +1,15 @@
 <template>
-  <div>
-    {{ age() }}
-    <br />
-    {{ date() }}
-    <br />
+  <div class="px-2">
+    <div class="d-flex justify-content-between align-items-center">
+      <font-awesome-icon icon="user" />
+      {{ age() }}
+    </div>
+    <div class="my-2 d-flex justify-content-between align-items-center">
+      <font-awesome-icon icon="calendar" />
+      {{ date() }}
+    </div>
     <div class="d-flex justify-content-between">
-      <div ref="counters" class="counter active"></div>
-      <div ref="counters" class="counter active"></div>
-      <div ref="counters" class="counter"></div>
-      <div ref="counters" class="counter"></div>
+      <div v-for="(active, i) in weekCounters()" :key="i" :class="['counter', { active: active }]"></div>
     </div>
   </div>
 </template>
@@ -25,22 +26,20 @@ export default class Time extends Vue {
 
   created() {
     this.$store.events.$on('tick', this.onTick)
-    this.$store.events.$on('tick', this.weekCounter)
   }
 
   onTick() {
     this.$store.tickCount++
+    if (this.$store.tickCount % 4 == 0) this.$store.events.$emit('tick-month')
   }
 
-  weekCounter() {
-    console.log(this.counters)
-    console.log(this.$refs.counters)
-    const i = this.counters.findIndex((counter) => {
-      return !counter.classList.contains('active')
-    })
-
-    if (i != -1) this.counters[i].classList.add('active')
-    else this.counters.forEach((counter) => counter.classList.remove('active'))
+  weekCounters() {
+    const weeks = (this.$store.tickCount % 4) + 1
+    const display = []
+    for (let i = 0; i < 4; i++) {
+      display[i] = i < weeks
+    }
+    return display
   }
 
   date() {
@@ -58,7 +57,7 @@ export default class Time extends Vue {
 .counter {
   width: 10px;
   height: 10px;
-  background-color: lightskyblue;
+  background-color: gray;
 
   &.active {
     background-color: darken(lightskyblue, 10);

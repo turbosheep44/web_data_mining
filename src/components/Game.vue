@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Tabs from '@/components/Tabs.vue'
-import Status from '@/components/Status.vue'
+import Tabs from '@/components/Tabs/Tabs.vue'
+import Status from '@/components/Status/Status.vue'
 import DevTools from '@/components/DevTools.vue'
 
 @Component({

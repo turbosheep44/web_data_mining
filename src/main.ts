@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import App from './App.vue'
 
 // BOOTSTRAP
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
@@ -14,13 +13,14 @@ Vue.use(SimpleStore)
 
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHryvnia, faSmile } from '@fortawesome/free-solid-svg-icons'
+import { faHryvnia, faSmile, faCalendar, faUser, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faHryvnia, faSmile)
+library.add(faHryvnia, faSmile, faCalendar, faUser, faChevronDown)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 
+import App from './App.vue'
 new Vue({
   render: h => h(App),
 }).$mount('#app')

@@ -1,6 +1,6 @@
 <template>
-  <b-container class="status">
-    <b-row>
+  <b-container class="status my-3">
+    <b-row align-v="center">
       <!-- status bars -->
       <b-col cols="8">
         <StatusBars />
@@ -16,8 +16,8 @@
 
 <script lang = "ts">
 import { Component, Vue } from 'vue-property-decorator'
-import StatusBars from '@/components/StatusBars.vue'
-import Time from '@/components/Time.vue'
+import StatusBars from '@/components/Status/StatusBars.vue'
+import Time from '@/components/Status/Time.vue'
 
 @Component({
   components: { StatusBars, Time },

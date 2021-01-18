@@ -5,8 +5,29 @@ export class Store {
 
   happiness: number = 0.75
   money: number = 3000
+  expenses: { name: string; price: number }[] = []
+  income: number = 1000
+
+  stocks: Stock[] = []
+
+  job: Job = { title: 'Unemployed', wage: 0, hours: 0 }
+  jobSearching: boolean = false
+  jobOffers: Job[] = []
 
   events: _Vue = new _Vue()
+}
+
+interface Stock {
+  risk: string
+  value: number[]
+  owned: number
+  visible: boolean
+}
+
+interface Job {
+  title: string
+  wage: number
+  hours: number
 }
 
 export class StorePlugin implements PluginObject<void> {
