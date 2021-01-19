@@ -12,6 +12,8 @@
       </b-col>
     </b-row>
   </b-container>
+
+  
 </template>
 
 <script lang = "ts">
@@ -20,7 +22,7 @@ import StatusBars from '@/components/Status/StatusBars.vue'
 import Time from '@/components/Status/Time.vue'
 
 @Component({
-  components: { StatusBars, Time },
+  components: { StatusBars, Time},
 })
 export default class Status extends Vue {}
 </script>
