@@ -3,16 +3,25 @@ import _Vue, { PluginObject } from 'vue'
 export class Store {
   tickCount: number = 0
 
+  // Stats
   happiness: number = 0.75
   money: number = 3000
+
+  // Money
   expenses: { name: string; price: number }[] = []
   income: number = 1000
+  rent: number = 300
 
+  // Stocks
   stocks: Stock[] = []
 
+  // Job
   job: Job = { title: 'Unemployed', wage: 0, hours: 0 }
-  jobSearching: boolean = false
+  isEmployed = () => this.job.title !== 'Unemployed'
   jobOffers: Job[] = []
+  jobSearchDuration: number = 4
+  jobSearchTargetTick: number = -1
+  isJobSearching = () => this.jobSearchTargetTick != -1
 
   events: _Vue = new _Vue()
 }

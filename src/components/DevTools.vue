@@ -87,12 +87,7 @@ export default class DevTools extends Vue {
   }
 
   createJobOffers() {
-    this.$store.jobOffers = [
-      { title: 'Teacher', wage: 15000, hours: 8 },
-      { title: 'Programmer', wage: 25000, hours: 10 },
-      { title: 'Security Guard', wage: 10000, hours: 6 },
-    ]
-    this.$store.jobSearching = false
+    this.$store.events.$emit('jobs-found')
   }
 }
 </script>

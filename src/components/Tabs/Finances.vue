@@ -17,7 +17,35 @@ import Work from '@/components/Tabs/Work.vue'
 @Component({
   components: { Expenses, Stocks, Work },
 })
-export default class Finances extends Vue {}
+export default class Finances extends Vue {
+  mounted() {
+    this.$store.events.$on('tick-month', this.calculateExpensesAndRevenues)
+  }
+
+  calculateExpensesAndRevenues() {
+    // clear notifications
+    this.$notify({ group: 'expense', clean: true })
+    this.$notify({ group: 'revenue', clean: true })
+
+    // wage income
+    if (this.$store.isEmployed()) {
+      this.$notify({
+        group: 'revenue',
+        title: 'Salary!',
+        text: 'Salary Invoice. $' + this.$store.job.wage + ' deposited into back account.',
+      })
+      this.$store.money += this.$store.job.wage
+    }
+
+    // expenses
+    this.$store.money -= this.$store.rent
+    this.$notify({
+      group: 'expense',
+      title: 'Rent',
+      text: '$' + this.$store.rent + ' for Rent removed from account.',
+    })
+  }
+}
 </script>
 
 <style lang="scss">

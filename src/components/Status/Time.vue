@@ -31,11 +31,21 @@ export default class Time extends Vue {
   onTick() {
     this.$store.tickCount++
     if (this.$store.tickCount % 4 == 0) this.$store.events.$emit('tick-month')
+    if (this.currentWeek() % 4 == 0) {
+      this.$store.events.$emit('month_passed')
+    }
+
+    if (this.$store.jobSearchTargetTick != -1 && this.$store.jobSearchTargetTick == this.$store.tickCount)
+      this.$store.events.$emit('jobs_found')
+  }
+
+  currentWeek() {
+    return this.$store.tickCount % 4
   }
 
   weekCounters() {
     const weeks = (this.$store.tickCount % 4) + 1
-    const display = []
+    const display: boolean[] = []
     for (let i = 0; i < 4; i++) {
       display[i] = i < weeks
     }

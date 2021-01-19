@@ -21,7 +21,7 @@ import DevTools from '@/components/DevTools.vue'
 export default class Game extends Vue {
   private tick: number
 
-  created() {
+  mounted() {
     this.tick = setInterval(() => {
       this.$store.events.$emit('tick')
     }, 1000)
