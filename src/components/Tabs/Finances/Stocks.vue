@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import LineChart from '@/components/Tabs/LineChart.vue'
+import LineChart from '@/components/Tabs/Finances/LineChart.vue'
 
 const HISTORY_LENGTH = 12
 

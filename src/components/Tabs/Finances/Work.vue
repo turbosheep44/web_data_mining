@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Employment from '@/components/Tabs/Employment.vue'
+import Employment from '@/components/Tabs/Finances/Employment.vue'
 
 @Component({
   components: { Employment },

@@ -10,9 +10,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Expenses from '@/components/Tabs/Expenses.vue'
-import Stocks from '@/components/Tabs/Stocks.vue'
-import Work from '@/components/Tabs/Work.vue'
+import Expenses from '@/components/Tabs/Finances/Expenses.vue'
+import Stocks from '@/components/Tabs/Finances/Stocks.vue'
+import Work from '@/components/Tabs/Finances/Work.vue'
 
 @Component({
   components: { Expenses, Stocks, Work },

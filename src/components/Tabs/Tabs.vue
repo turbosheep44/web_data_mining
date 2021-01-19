@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Finances from '@/components/Tabs/Finances.vue'
+import Finances from '@/components/Tabs/Finances/Finances.vue'
 
 @Component({
   components: { Finances },

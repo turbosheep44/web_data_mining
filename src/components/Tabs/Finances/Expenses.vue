@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { Component, Ref, Vue } from 'vue-property-decorator'
-import PieChart from './PieChart.vue'
+import PieChart from '@/components/Tabs/Finances/PieChart.vue'
 
 const COLORS = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
 
