@@ -8,12 +8,12 @@
       <b-card-header @click="toggleVisible(i)">
         <div class="d-flex justify-content-between align-items-center toggle-header">
           <h6 class="mb-0">{{ stock.risk }} Risk</h6>
-          <span class="text-right font-italic">€{{ stock.value[stock.value.length - 1].toFixed(2) }}</span>
+          <span class="text-right font-italic">{{ stock.value[stock.value.length - 1] | money }}</span>
         </div>
       </b-card-header>
 
       <!-- Body -->
-      <b-collapse :id="`stock-${i}`" v-model="stock.visible">
+      <b-collapse v-model="visible[i]">
         <b-card-body>
           <!-- Graph -->
           <LineChart
@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import LineChart from '@/components/Tabs/Finances/LineChart.vue'
+import LineChart from '@/components/Tabs/Charts/LineChart.vue'
 
 const HISTORY_LENGTH = 12
 
@@ -51,6 +51,7 @@ const HISTORY_LENGTH = 12
 })
 export default class Stocks extends Vue {
   private startMonth: number
+  private visible: boolean[] = []
 
   mounted() {
     this.$store.events.$on('tick-month', this.updateStocks)
@@ -59,26 +60,28 @@ export default class Stocks extends Vue {
         risk: 'Low',
         value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         owned: 5,
-        visible: true,
       },
       {
         risk: 'Medium',
         value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         owned: 5,
-        visible: false,
       },
       {
         risk: 'High',
         value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         owned: 5,
-        visible: false,
       },
     ]
+
+    this.visible = Array(this.$store.stocks.length).fill(false)
+    this.visible[0] = true
+
     this.updateStocks()
   }
 
   toggleVisible(i: number) {
-    this.$store.stocks[i].visible = !this.$store.stocks[i].visible
+    this.visible[i] = !this.visible[i]
+    this.$forceUpdate()
   }
 
   updateStocks() {

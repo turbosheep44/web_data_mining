@@ -8,7 +8,7 @@ export class Store {
   money: number = 3000
 
   // Money
-  expenses: { name: string; price: number }[] = []
+  expenses: Expense[] = []
   income: number = 1000
   rent: number = 300
 
@@ -23,20 +23,71 @@ export class Store {
   jobSearchTargetTick: number = -1
   isJobSearching = () => this.jobSearchTargetTick != -1
 
+  // Country
+  country: string = 'Malta'
+
+  // Property
+  property: number = 0
+  properties: Property[] = []
+
+  // Time
+  activities: Activity[] = []
+  sleep: number = 8
+
+  // Transport
+  transport: number = 0
+  transports: Transport[]
+
+  // Luxuries
+  luxuryTime: number = 3
+  luxuries: Luxury[]
+
   events: _Vue = new _Vue()
+}
+
+interface Luxury {
+  name: string
+  description: string
+}
+
+interface Expense {
+  name: string
+  price: number
+}
+
+interface Activity {
+  name: string
+  hours: number
 }
 
 interface Stock {
   risk: string
   value: number[]
   owned: number
-  visible: boolean
 }
 
 interface Job {
   title: string
   wage: number
   hours: number
+}
+
+interface Property {
+  name: string
+  description: string
+  price: number
+  isRent: boolean
+  transportCostModifier: number
+  happiness: number
+}
+
+interface Transport {
+  name: string
+  description: string
+  purchased: boolean
+  price: number
+  upkeep: number
+  time: number
 }
 
 export class StorePlugin implements PluginObject<void> {
