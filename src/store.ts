@@ -6,16 +6,6 @@ export class Store {
   // Stats
   happiness: number = 0.75
   money: number = 3000
-  rent:number = 300
-
-  // Job searching variables
-  jobSearchDuration:number = 4
-  jobSearchTargetTick:number = -1
-  potentialJobs:{}[];
-
-  // Current job variables
-  currentJob:{}
-  employed:boolean = false
 
   // Money
   expenses: { name: string; price: number }[] = []
