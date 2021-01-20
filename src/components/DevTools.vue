@@ -73,7 +73,7 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class DevTools extends Vue {
   private ticks: number = 0
   private expenses: string = 'School:25 Electricity:130 Water:80 Taxes:350 Mortgage:250 Basics:80'
-  private activities: string = 'Sleep:8 Luxuries:3 Work:10 Free:3'
+  private activities: string = 'Sleep:8 Luxuries:3 Work:10'
   private visible: boolean = false
 
   created() {

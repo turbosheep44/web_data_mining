@@ -9,7 +9,7 @@
         <h6 class="font-weight-bold">Sleep</h6>
         <h6 class="mt-2">{{ $store.sleep }} hrs</h6>
       </div>
-      <b-form-input type="range" min="5" max="10" step="0.5" number v-model="$store.sleep" @change="updateSleep"></b-form-input>
+      <b-form-input type="range" min="5" :max="maxSleep()" step="0.5" number v-model="$store.sleep" @change="updateSleep"></b-form-input>
     </div>
 
     <!-- Pie Chart -->
@@ -17,7 +17,7 @@
 
     <!-- Totals -->
     <div class="mt-3">.</div>
-    <div v-for="activity in activitiesWithoutFree()" :key="activity.name" class="d-flex justify-content-between align-items-center">
+    <div v-for="activity in activitiesWithFree()" :key="activity.name" class="d-flex justify-content-between align-items-center">
       <span>{{ activity.name }}</span>
       <span class="text-right text-danger">{{ activity.hours }} hrs</span>
     </div>
@@ -65,12 +65,13 @@ export default class Time extends Vue {
 
   activityData() {
     return {
-      labels: this.$store.activities.map((activity) => activity.name),
+      
+      labels: this.activitiesWithFree().map((activity) => activity.name),
       datasets: [
         {
-          data: this.$store.activities.map((activity) => activity.hours),
+          data: this.activitiesWithFree().map((activity) => activity.hours),
           backgroundColor: ({ dataIndex }: any) => {
-            return this.$store.activities[dataIndex].name == 'Free' ? '#eee' : COLORS[dataIndex % COLORS.length]
+            return this.activitiesWithFree()[dataIndex].name == 'Free Time' ? '#eee' : COLORS[dataIndex % COLORS.length]
           },
           borderColor: '#fff',
           borderWidth: 3,
@@ -80,11 +81,26 @@ export default class Time extends Vue {
   }
 
   totalTime() {
-    return this.$store.activities.reduce((acc, act) => (act.name == 'Free' ? 0 : act.hours) + acc, 0)
+    return this.$store.activities.reduce((acc, act) => (act.hours) + acc, 0)
   }
 
-  activitiesWithoutFree() {
-    return this.$store.activities.filter((act) => act.name != 'Free')
+  maxSleep(){
+    return 24-this.totalTime()+this.currentSleepTime()
+  }
+
+  currentSleepTime(){
+    const sleep = this.$store.activities.find((act) => act.name == 'Sleep') ?? { hours: 0 }
+    return sleep.hours
+  }
+
+  activitiesWithFree() {
+    const timeUsed = this.totalTime()
+    if(timeUsed == 24) return this.$store.activities
+    
+    const withFree = this.$store.activities.slice()
+    withFree.push({name:'Free Time', hours:24-timeUsed})
+    // console.log("with free", withFree)
+    return withFree
   }
 
   updateSleep() {
