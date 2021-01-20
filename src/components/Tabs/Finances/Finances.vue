@@ -32,13 +32,20 @@ export default class Finances extends Vue {
       this.$notify({
         group: 'revenue',
         title: 'Salary!',
-        text: 'Salary Invoice. $' + this.$store.job.wage + ' deposited into back account.',
+        text: 'Salary Invoice. $' + (this.$store.job.wage/12).toFixed(2)  + ' deposited into back account.',
       })
-      this.$store.money += this.$store.job.wage
+      this.$store.money += this.$store.job.wage/12
     }
 
     // expenses
     this.$store.money -= this.$store.rent
+    const index = this.$store.expenses.findIndex((exp) => { return exp.name == 'Rent'})
+    if(index == -1)    this.$store.expenses.push({ name:'Rent', price: this.$store.rent })
+    else if(this.$store.expenses[index].price != this.$store.rent){
+      this.$store.expenses[index].price = this.$store.rent
+      this.$forceUpdate()
+    }
+    this.$forceUpdate()
     this.$notify({
       group: 'expense',
       title: 'Rent',

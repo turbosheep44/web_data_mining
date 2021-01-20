@@ -71,7 +71,7 @@ export default class DevTools extends Vue {
 
   created() {
     this.$on('tick', () => console.log('tick'))
-    this.updateExpenses()
+    // this.updateExpenses()
   }
 
   simulateTicks() {

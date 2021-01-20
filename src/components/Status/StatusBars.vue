@@ -31,7 +31,7 @@ export default class StatusBars extends Vue {
       {
         value: this.$store.money,
         max: 10000,
-        label: `€${this.$store.money}`,
+        label: `€${(this.$store.money).toFixed(2)}`,
         variant: 'success',
         icon: 'hryvnia',
       },

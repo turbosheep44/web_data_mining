@@ -8,7 +8,7 @@
       <b-card-header @click="toggleVisible(i)">
         <div class="d-flex justify-content-between align-items-center toggle-header">
           <h6 class="mb-0">{{ stock.risk }} Risk</h6>
-          <span class="text-right font-italic">€{{ stock.value[stock.value.length - 1].toFixed(2) }}</span>
+          <span class="text-right font-italic">Profit: €{{((stock.owned * stock.value[stock.value.length - 1]) - stock.invested).toFixed(2)}}</span>
         </div>
       </b-card-header>
 
@@ -25,14 +25,14 @@
 
           <!-- Controls -->
           <div class="d-flex justify-content-center align-items-center">
-            <b-button squared variant="outline-danger" class="mx-1 px-2" @click="stock.owned -= 5">Sell 5</b-button>
-            <b-button squared variant="outline-danger" class="mx-1 px-2" @click="stock.owned--">Sell 1</b-button>
+            <b-button squared variant="outline-danger" class="mx-1 px-2" @click="sellStock(i, 5)">Sell 5</b-button>
+            <b-button squared variant="outline-danger" class="mx-1 px-2" @click="sellStock(i, 1)">Sell 1</b-button>
             <span class="mx-1 text-center">
               {{ stock.owned }} <br />
-              €{{ stock.owned * stock.value[stock.value.length - 1] }}
+              €{{ (stock.owned * stock.value[stock.value.length - 1]).toFixed(2) }}
             </span>
-            <b-button squared variant="outline-success" class="mx-1 px-2" @click="stock.owned++">Buy 1</b-button>
-            <b-button squared variant="outline-success" class="mx-1 px-2" @click="stock.owned += 5">Buy 5</b-button>
+            <b-button squared variant="outline-success" class="mx-1 px-2" @click="buyStock(i, 1)">Buy 1</b-button>
+            <b-button squared variant="outline-success" class="mx-1 px-2" @click="buyStock(i, 5)">Buy 5</b-button>
           </div>
         </b-card-body>
       </b-collapse>
@@ -52,29 +52,75 @@ const HISTORY_LENGTH = 12
 export default class Stocks extends Vue {
   private startMonth: number
 
+
+
   mounted() {
     this.$store.events.$on('tick-month', this.updateStocks)
     this.$store.stocks = [
       {
         risk: 'Low',
         value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        owned: 5,
+        owned: 0,
         visible: true,
+        invested:0
       },
       {
         risk: 'Medium',
         value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        owned: 5,
+        owned: 0,
         visible: false,
+        invested:0
+
       },
       {
         risk: 'High',
         value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        owned: 5,
+        owned: 0,
         visible: false,
+        invested:0
+
       },
     ]
     this.updateStocks()
+  }
+
+  buyStock(stockId:number, amount:number){
+    const value = this.$store.stocks[stockId].value[this.$store.stocks[stockId].value.length - 1] * amount
+    if(value > this.$store.money){
+       this.$notify({
+        group: 'notification',
+        title: 'Not enough money!',
+        text: 'You cannot afford '+amount+' of Stock ' + stockId +' ($ ' +value.toFixed(2)+ ')'
+      })
+    }else{
+      this.$store.stocks[stockId].owned += amount
+      this.$store.stocks[stockId].invested += value
+      this.$store.money -= value
+    }
+
+  }
+
+  sellStock(stockId:number, amount:number){
+    if(this.$store.stocks[stockId].owned < amount){
+      this.$notify({
+        group: 'notification',
+        title: 'You do not own ' + amount + ' stocks of Stock ' + stockId,
+        text: 'Note: You currently own ' + this.$store.stocks[stockId].owned + ' of this stock.'
+      })
+    }else{
+      const oldValue = this.$store.stocks[stockId].value[this.$store.stocks[stockId].value.length - 1] * this.$store.stocks[stockId].owned
+      const newValue = this.$store.stocks[stockId].value[this.$store.stocks[stockId].value.length - 1] * (this.$store.stocks[stockId].owned-amount)
+      const ratio = newValue / oldValue
+      this.$store.stocks[stockId].owned -= amount
+      this.$store.stocks[stockId].invested *= ratio
+      this.$store.money += (oldValue - newValue)
+
+      this.$notify({
+        group: 'notification',
+        title: 'Sold Stock ' + stockId,
+        text: ':)'
+      })
+    }
   }
 
   toggleVisible(i: number) {
@@ -89,8 +135,14 @@ export default class Stocks extends Vue {
     }
 
     for (let i = 0; i < this.$store.stocks.length; i++) {
-      this.$store.stocks[i].value.push(Math.floor(Math.random() * 12) + 1)
+
+      const lastValue = this.$store.stocks[i].value[11]
+      const range = this.$store.risk[i] * lastValue
+      const change = Math.random() * range
+
+      this.$store.stocks[i].value.push(lastValue + change - (range/2))
       this.$store.stocks[i].value.shift()
+      console.log("---")
     }
   }
 

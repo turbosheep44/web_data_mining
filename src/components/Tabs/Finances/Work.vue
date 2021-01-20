@@ -92,6 +92,7 @@ export default class Work extends Vue {
   acceptJob(offer: number) {
     this.$store.job = this.$store.jobOffers[offer]
     this.$store.jobOffers = []
+    this.$store.income = this.$store.job.wage/12
   }
 }
 </script>

@@ -9,11 +9,12 @@ export class Store {
 
   // Money
   expenses: { name: string; price: number }[] = []
-  income: number = 1000
-  rent: number = 300
+  income: number = 0
+  rent: number = 500
 
   // Stocks
   stocks: Stock[] = []
+  risk:number[] = [0.1, 0.2, 0.4]
 
   // Job
   job: Job = { title: 'Unemployed', wage: 0, hours: 0 }
@@ -31,6 +32,7 @@ interface Stock {
   value: number[]
   owned: number
   visible: boolean
+  invested:number
 }
 
 interface Job {
