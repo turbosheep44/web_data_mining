@@ -30,6 +30,7 @@
       <!-- header -->
       <transition name="fade">
         <b-row v-if="selectedCountry != $store.country" class="country-expenses-header">
+          <b-col></b-col>
           <b-col class="text-right font-weight-bold"><country-flag :country="myFlags[selectedCountry]" size='small'/>  {{ selectedCountry }}</b-col>
           <b-col class="text-right font-weight-bold"><country-flag :country="myFlags[$store.country ]" size='small'/>  {{ $store.country }}</b-col>
         </b-row>
