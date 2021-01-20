@@ -8,11 +8,11 @@
       <b-dropdown v-model="selectedCountry" menu-class="w-100" block split variant="outline-dark" class="mr-4 flex-fill">
         <template #button-content>
           <div class="text-left">
-            {{ selectedCountry }}
+            <country-flag :country="myFlags[selectedCountry]" size='small'/>  {{ selectedCountry }}
           </div>
         </template>
         <b-dropdown-item v-for="country of countries" :key="country" :value="country" @click="selectedCountry = country">
-          {{ country }}
+         <country-flag :country="myFlags[country]" size='small'/> {{ country }}
         </b-dropdown-item>
       </b-dropdown>
 
@@ -21,7 +21,7 @@
       </div>
 
       <b-tooltip target="relocate" triggers="hover" placement="rightbottom">
-        Relocating to a new country costs €3000. Some of your belongings like you house will be automatically sold. In a new country, there
+        Relocating to a new country costs €3000. Some of your belongings like your house will be automatically sold. In a new country, there
         are new oppotunities for employment and a different cost of living.
       </b-tooltip>
     </div>
@@ -30,24 +30,27 @@
       <!-- header -->
       <transition name="fade">
         <b-row v-if="selectedCountry != $store.country" class="country-expenses-header">
-          <b-col></b-col>
-          <b-col class="text-right font-weight-bold">{{ selectedCountry }}</b-col>
-          <b-col class="text-right font-weight-bold">{{ $store.country }}</b-col>
+          <b-col class="text-right font-weight-bold"><country-flag :country="myFlags[selectedCountry]" size='small'/>  {{ selectedCountry }}</b-col>
+          <b-col class="text-right font-weight-bold"><country-flag :country="myFlags[$store.country ]" size='small'/>  {{ $store.country }}</b-col>
         </b-row>
       </transition>
 
       <!-- breakdown -->
-      <b-row v-for="{ name, price, comparePrice } in allExpenses()" :key="name" align-v="center" align-content="between">
+      <b-row v-for="{ name, price, comparePrice } in allExpenses().slice(0,10)" :key="name" align-v="center" align-content="between">
         <b-col>{{ name }}</b-col>
         <transition name="fade">
           <b-col
-            :class="['text-right country-expense', comparePrice > price ? 'text-danger' : 'text-success']"
+            :class="['text-right country-expense', comparePrice > price? 'text-danger' : 'text-success']"
             v-if="selectedCountry != $store.country"
           >
             {{ comparePrice | money }}
           </b-col>
         </transition>
-        <b-col class="text-right text-danger">{{ price | money }}</b-col>
+        <b-col
+            :class="['text-right country-expense', comparePrice < price ? 'text-danger' : 'text-success']"
+          >
+            {{ price | money }}
+        </b-col>
       </b-row>
 
       <!-- total -->
@@ -68,23 +71,33 @@
 
 <script lang = "ts">
 import { Component, Vue } from 'vue-property-decorator'
-import info from '@/assets/results.json'
+import info from '@/assets/countries.json'
+import convert from '@/assets/convert.json'
+import flags from '@/assets/flags.json'
 
-@Component({})
+//? A: Please let me know if this is the right place to mount this component
+import CountryFlag from 'vue-country-flag'
+
+@Component({
+components: {CountryFlag}
+})
 export default class Country extends Vue {
   private countries: string[] = []
+  private expenseTypes:string[] = []
   private selectedCountry: string = this.$store.country
-
   private countryExpenses: { [country: string]: Expense[] } = {}
-
+  private myFlags = flags
+  
   created() {
+    
     this.countries = Object.keys(info).sort()
-    this.countries.forEach((country, i) => {
-      this.countryExpenses[country] = [
-        { name: 'Utilities', price: 10 + i },
-        { name: 'Internet', price: 10 + i },
-        { name: 'Clothing', price: 10 + i },
-      ]
+    this.expenseTypes = Object.keys(convert)
+    this.countries.forEach((country) => {
+
+      this.countryExpenses[country] = []
+      this.expenseTypes.forEach((type) => {
+        this.countryExpenses[country].push({name: convert[type], price: info[country][type]})
+      })
       // parseFloat(country['Utilities (Monthly)'][0][1]),
       // parseFloat(country['Utilities (Monthly)'][2][1]),
       // parseFloat(country['Clothing And Shoes'][0][1]) + parseFloat(country['Clothing And Shoes'][1][1]),
