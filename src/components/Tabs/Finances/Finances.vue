@@ -1,21 +1,21 @@
 <template>
-  <b-container fluid="sm">
-    <b-row align-v="start" align-h="center">
-      <b-col xl="4" md="6" sm="10" class="mb-4"><Work /></b-col>
-      <b-col xl="4" md="6" sm="10" class="mb-4"><Stocks /></b-col>
-      <b-col xl="4" md="6" sm="10" class="mb-4"><Expenses /></b-col>
-    </b-row>
-  </b-container>
+  <ColumnView>
+    <template #first> <Work /> </template>
+    <template #second> <Stocks /> </template>
+    <template #third> <Expenses /> </template>
+  </ColumnView>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+
+import ColumnView from '@/components/Tabs/ColumnView.vue'
 import Expenses from '@/components/Tabs/Finances/Expenses.vue'
 import Stocks from '@/components/Tabs/Finances/Stocks.vue'
 import Work from '@/components/Tabs/Finances/Work.vue'
 
 @Component({
-  components: { Expenses, Stocks, Work },
+  components: { ColumnView, Expenses, Stocks, Work },
 })
 export default class Finances extends Vue {
   mounted() {
@@ -56,16 +56,4 @@ export default class Finances extends Vue {
 </script>
 
 <style lang="scss">
-@import 'bootstrap/scss/_mixins.scss';
-@import 'bootstrap/scss/_functions.scss';
-@import 'bootstrap/scss/_variables.scss';
-
-.wide-separator {
-  width: 95%;
-  // margin-left: -10%;
-  background-color: #999;
-
-  margin-bottom: ($spacer * 0.5);
-  margin-top: 0;
-}
 </style>

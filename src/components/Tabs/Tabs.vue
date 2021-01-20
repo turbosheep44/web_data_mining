@@ -2,9 +2,9 @@
   <div>
     <b-card no-body>
       <b-tabs card>
-        <b-tab title="Leisure" active>{{ this.$store.tickCount }} </b-tab>
-        <b-tab title="Home"><p>I'm the home tab!</p></b-tab>
-        <b-tab title="Finances" active><Finances /></b-tab>
+        <b-tab title="Leisure">{{ this.$store.tickCount }} </b-tab>
+        <b-tab title="Home" active><Home /></b-tab>
+        <b-tab title="Finances"><Finances /></b-tab>
       </b-tabs>
     </b-card>
   </div>
@@ -13,12 +13,25 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import Finances from '@/components/Tabs/Finances/Finances.vue'
+import Home from '@/components/Tabs/Home/Home.vue'
 
 @Component({
-  components: { Finances },
+  components: { Finances, Home },
 })
 export default class Tabs extends Vue {}
 </script>
 
-<style>
+<style lang="scss">
+@import 'bootstrap/scss/_mixins.scss';
+@import 'bootstrap/scss/_functions.scss';
+@import 'bootstrap/scss/_variables.scss';
+
+.wide-separator {
+  width: 95%;
+  // margin-left: -10%;
+  background-color: #999;
+
+  margin-bottom: ($spacer * 0.5);
+  margin-top: 0;
+}
 </style>

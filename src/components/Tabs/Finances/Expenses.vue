@@ -6,11 +6,7 @@
     <hr class="wide-separator" />
 
     <!-- Pie Chart -->
-    <div class="d-flex justify-content-center">
-      <div ref="chartContainer" style="width: 100%; height: 100%">
-        <PieChart :chart-data="expenses()" :options="options()"></PieChart>
-      </div>
-    </div>
+    <PieChart :chart-data="expenseData()" :options="options" style="height: 300px"></PieChart>
 
     <!-- Totals -->
     <div class="mt-4 d-flex justify-content-between align-items-center">
@@ -33,49 +29,33 @@
 </template>
 
 <script lang="ts">
-import { Component, Ref, Vue } from 'vue-property-decorator'
-import PieChart from '@/components/Tabs/Finances/PieChart.vue'
-
-const COLORS = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+import { Component, Vue } from 'vue-property-decorator'
+import PieChart, { COLORS } from '@/components/Tabs/Charts/PieChart.vue'
 
 @Component({
   components: { PieChart },
 })
 export default class Expenses extends Vue {
-  private showLegend: boolean = true
-  @Ref()
-  private chartContainer: HTMLDivElement
-
-  mounted() {
-    this.showLegend = this.chartContainer.getBoundingClientRect().width > 200
-  }
-
-  options() {
-    return {
-      aspectRatio: 1,
-      onResize: (_: Chart, { width }: { width: number }) => {
-        this.showLegend = width > 200
-      },
-
-      legend: {
-        display: this.showLegend,
-        position: 'left',
-        labels: { boxWidth: 15, fontSize: 14 },
-      },
-      tooltips: {
-        displayColors: false,
-        callbacks: {
-          label: (item: any, data: any) => {
-            const label = data.labels[item.index] || ''
-            const value = data.datasets[item.datasetIndex].data[item.index]
-            return `${label}: €${value.toFixed(2)}`
-          },
+  private options = {
+    maintainAspectRatio: false,
+    responsive: true,
+    legend: {
+      position: 'left',
+      labels: { boxWidth: 15, fontSize: 14 },
+    },
+    tooltips: {
+      displayColors: false,
+      callbacks: {
+        label: (item: any, data: any) => {
+          const label = data.labels[item.index] || ''
+          const value = data.datasets[item.datasetIndex].data[item.index]
+          return `${label}: €${value.toFixed(2)}`
         },
       },
-    }
+    },
   }
 
-  expenses() {
+  expenseData() {
     return {
       labels: this.$store.expenses.map((expense) => expense.name),
       datasets: [

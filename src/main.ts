@@ -2,8 +2,7 @@ import Vue from 'vue'
 
 // BOOTSTRAP
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import '@/assets/app.scss'
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
@@ -18,12 +17,20 @@ Vue.use(SimpleStore)
 
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHryvnia, faSmile, faCalendar, faUser, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faHryvnia, faSmile, faCalendar, faUser, faChevronDown, faHome, faBuilding, faBicycle } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faTv, faSwimmingPool, faCoffee, faLaptop, faFan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faHryvnia, faSmile, faCalendar, faUser, faChevronDown)
+library.add(faHryvnia, faSmile, faCalendar, faUser, faChevronDown, faHome, faBuilding, faBicycle)
+library.add(faClock, faTv, faSwimmingPool, faCoffee, faLaptop, faFan)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
+
+// COMMON FILTERS
+Vue.filter('money', function(value) {
+  if (typeof value != typeof 0) return value
+  return `€${value.toLocaleString({ style: 'currency' })}`
+})
 
 import App from './App.vue'
 new Vue({

@@ -13,7 +13,7 @@
       </b-card-header>
 
       <!-- Body -->
-      <b-collapse :id="`stock-${i}`" v-model="stock.visible">
+      <b-collapse v-model="visible[i]">
         <b-card-body>
           <!-- Graph -->
           <LineChart
@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import LineChart from '@/components/Tabs/Finances/LineChart.vue'
+import LineChart from '@/components/Tabs/Charts/LineChart.vue'
 
 const HISTORY_LENGTH = 12
 
@@ -51,6 +51,7 @@ const HISTORY_LENGTH = 12
 })
 export default class Stocks extends Vue {
   private startMonth: number
+  private visible: boolean[] = []
 
 
 
@@ -81,6 +82,10 @@ export default class Stocks extends Vue {
 
       },
     ]
+
+    this.visible = Array(this.$store.stocks.length).fill(false)
+    this.visible[0] = true
+
     this.updateStocks()
   }
 
@@ -124,7 +129,8 @@ export default class Stocks extends Vue {
   }
 
   toggleVisible(i: number) {
-    this.$store.stocks[i].visible = !this.$store.stocks[i].visible
+    this.visible[i] = !this.visible[i]
+    this.$forceUpdate()
   }
 
   updateStocks() {

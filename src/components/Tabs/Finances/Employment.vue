@@ -14,7 +14,7 @@
             <span>Wage</span>
             <font-awesome-icon size="sm" icon="hryvnia" class="ml-2" />
           </span>
-          <span :class="['font-weight-bold font-italic', { 'text-success': wage > 0 }]">€{{ wage.toLocaleString() }} </span>
+          <span :class="['font-weight-bold font-italic', { 'text-success': wage > 0 }]">{{ wage | money }} </span>
         </div>
         <div class="d-flex justify-content-between align-items-center">
           <span>
