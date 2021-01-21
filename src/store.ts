@@ -16,6 +16,11 @@ export class Store {
   stocks: Stock[] = []
   risk:number[] = [0.1, 0.2, 0.4]
 
+  // Free time
+  totalTime = () =>{
+    return this.activities.reduce((acc, act) => (act.hours) + acc, 0)
+  }
+
   // Job
   job: Job = { title: 'Unemployed', wage: 0, hours: 0 }
   isEmployed = () => this.job.title !== 'Unemployed'
@@ -36,7 +41,7 @@ export class Store {
   sleep: number = 8
 
   // Transport
-  transport: number = 0
+  transport: number = -1
   transports: Transport[]
 
   // Luxuries

@@ -26,11 +26,11 @@
     <div class="font-weight-bold">
       <div class="d-flex justify-content-between align-items-center">
         <span>Time Used</span>
-        <span class="text-danger">{{ totalTime() }} hrs</span>
+        <span class="text-danger">{{ this.$store.totalTime() }} hrs</span>
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <span>Free Time</span>
-        <span class="text-success">{{ 24 - totalTime() }} hrs</span>
+        <span class="text-success">{{ 24 - this.$store.totalTime() }} hrs</span>
       </div>
     </div>
   </div>
@@ -80,12 +80,8 @@ export default class Time extends Vue {
     }
   }
 
-  totalTime() {
-    return this.$store.activities.reduce((acc, act) => (act.hours) + acc, 0)
-  }
-
   maxSleep(){
-    return 24-this.totalTime()+this.currentSleepTime()
+    return 24-this.$store.totalTime()+this.currentSleepTime()
   }
 
   currentSleepTime(){
@@ -94,7 +90,7 @@ export default class Time extends Vue {
   }
 
   activitiesWithFree() {
-    const timeUsed = this.totalTime()
+    const timeUsed = this.$store.totalTime()
     if(timeUsed == 24) return this.$store.activities
     
     const withFree = this.$store.activities.slice()
@@ -104,9 +100,6 @@ export default class Time extends Vue {
   }
 
   updateSleep() {
-    // TODO: update logic for number of sleep hours changed
-    //    what if there are not enough hours
-    //    update free time
     const sleep = this.$store.activities.find((act) => act.name == 'Sleep') ?? { hours: 0 }
     sleep.hours = this.$store.sleep
   }

@@ -38,6 +38,16 @@ export default class Finances extends Vue {
     }
 
     // expenses
+    // transport expenses
+    if(this.$store.transport != -1){
+      const transport = this.$store.transports[this.$store.transport]
+      this.$notify({
+        group: 'expense',
+        title: transport.name + " upkeep expense",
+        text: '$' + transport.upkeep + " deducted from your account"
+      })
+    }
+    // rent
     this.$store.money -= this.$store.rent
     const index = this.$store.expenses.findIndex((exp) => { return exp.name == 'Rent'})
     if(index == -1)    this.$store.expenses.push({ name:'Rent', price: this.$store.rent })

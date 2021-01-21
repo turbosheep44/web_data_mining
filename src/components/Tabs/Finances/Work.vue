@@ -86,13 +86,32 @@ export default class Work extends Vue {
       title: "Resigned from '" + this.$store.job.title + "'",
       text: 'Happy Unemployment!',
     })
+    const work = this.$store.activities.findIndex((act) => { return act.name == 'Work' })
+    this.$store.activities.splice(work)
     this.$store.job = { title: 'Unemployed', wage: 0, hours: 0 }
   }
 
   acceptJob(offer: number) {
-    this.$store.job = this.$store.jobOffers[offer]
-    this.$store.jobOffers = []
-    this.$store.income = this.$store.job.wage/12
+    // Check how much free time you have
+    if(this.$store.isEmployed()){
+      this.$notify({
+        group: 'notification',
+        title: "You are currently employed!",
+        text: 'Please resign before accepting a new job!',
+      })
+    }else if(this.$store.totalTime() + this.$store.jobOffers[offer].hours > 24){
+      this.$notify({
+        group: 'notification',
+        title: "You do not have enough time for this job!",
+        text: 'Please allocate more time by reducing time spent on sleeping or luxuries, or choose a different job',
+      })
+    }else{
+      this.$store.job = this.$store.jobOffers[offer]
+      this.$store.jobOffers = []
+      this.$store.income = this.$store.job.wage/12
+
+      this.$store.activities.push({name:'Work', hours:this.$store.job.hours})
+    }
   }
 }
 </script>

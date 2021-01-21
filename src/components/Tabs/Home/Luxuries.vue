@@ -61,13 +61,9 @@ export default class Luxuries extends Vue {
     return LUXURY_ICONS[luxury.toLowerCase()]
   }
 
-  totalTime() {
-    return this.$store.activities.reduce((acc, act) => (act.hours) + acc, 0)
-  }
-
   maxLuxuryTime(){
-    console.log(24,this.totalTime(), this.currentLuxuryTime())
-    return 24-this.totalTime()+this.currentLuxuryTime()
+    console.log(24,this.$store.totalTime(), this.currentLuxuryTime())
+    return 24-this.$store.totalTime()+this.currentLuxuryTime()
   }
 
   currentLuxuryTime(){
