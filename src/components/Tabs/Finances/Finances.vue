@@ -39,7 +39,7 @@ export default class Finances extends Vue {
 
     // expenses
     // transport expenses
-    if(this.$store.transport != -1){
+    if(this.$store.transport != -1 && this.$store.transports[this.$store.transport].upkeep != 0){
       const transport = this.$store.transports[this.$store.transport]
       this.$notify({
         group: 'expense',

@@ -72,7 +72,7 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({})
 export default class DevTools extends Vue {
   private ticks: number = 0
-  private expenses: string = 'School:25 Electricity:130 Water:80 Taxes:350 Mortgage:250 Basics:80'
+  private expenses: string = '' //'School:25 Electricity:130 Water:80 Taxes:350 Mortgage:250 Basics:80'
   private activities: string = 'Sleep:8 Luxuries:3'
   private visible: boolean = false
 
@@ -88,10 +88,11 @@ export default class DevTools extends Vue {
 
   updateExpenses() {
     this.$store.expenses = []
-    for (const expense of this.expenses.split(' ')) {
-      const [name, price] = expense.split(':')
-      this.$store.expenses.push({ name, price: parseFloat(price) })
-    }
+    // for (const expense of this.expenses.split(' ')) {
+    //   const [name, price] = expense.split(':')
+    //   this.$store.expenses.push({ name, price: parseFloat(price) })
+    // }
+    this.$store.expenses.push({name:'Rent', price:this.$store.rent})
   }
   updateActivities() {
     // this.$store.activities = []

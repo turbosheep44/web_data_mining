@@ -121,12 +121,36 @@ export default class Property extends Vue {
   }
 
   purchaseProperty(p: number) {
-    // TODO: add logic for buying a property
-    console.log(`purchase property ${p}`)
+    const prop = this.$store.properties[p]
+    if(prop.price > this.$store.money){
+        this.$notify({
+        group: 'notification',
+        title: prop.name + " is too expensive",
+        text: 'You cannot afford it. Please save up more money and try again later'
+      })
+      
+    }else{
+      const currentTransport = this.$store.transports[this.$store.transport]
+      if( Math.floor((currentTransport.time * prop.transportCostModifier * 4)/4)){
+        this.$notify({
+          group: 'notification',
+          title: prop.name + " is too far away from work to fit into your schedule",
+          text: 'Allocate more free time and you will be able to purchase this property'
+        })
+      }else{
+        this.$store.property = p
+        this.visible.fill(false)
+        this.visible[p] = true
 
-    this.$store.property = p
-    this.visible.fill(false)
-    this.visible[p] = true
+        this.$notify({
+          group: 'notification',
+          title: prop.name + " purchased!",
+          text: 'Congratulations on purchasing this new property!'
+        })
+      }
+      
+    }
+
   }
 }
 </script>

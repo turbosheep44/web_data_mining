@@ -62,7 +62,6 @@ export default class Luxuries extends Vue {
   }
 
   maxLuxuryTime(){
-    console.log(24,this.$store.totalTime(), this.currentLuxuryTime())
     return 24-this.$store.totalTime()+this.currentLuxuryTime()
   }
 
@@ -73,7 +72,6 @@ export default class Luxuries extends Vue {
 
   updateLuxuryTime() {
     const luxuries = this.$store.activities.find((act) => act.name == 'Luxuries') ?? { hours: 0 }
-    console.log('there are', this.$store.luxuryTime)
     luxuries.hours = this.$store.luxuryTime
   }
 }

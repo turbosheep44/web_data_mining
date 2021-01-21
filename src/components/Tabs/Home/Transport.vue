@@ -45,7 +45,7 @@
               </div>
               <div>
                 <font-awesome-icon icon="clock" class="mr-1 text-dark" />
-                <span>{{ transport.time }}</span>
+                <span>{{ getTime(transport.time) }}</span>
               </div>
             </b-col>
           </b-row>
@@ -112,6 +112,15 @@ export default class Transport extends Vue {
   toggleVisible(i) {
     this.visible[i] = !this.visible[i]
     this.$forceUpdate()
+  }
+
+  // Calculate time given the property cost multiplier, rounded to the next 
+  // half hour
+  getTime(transportTime:number){
+    const time = this.$store.properties[this.$store.property].transportCostModifier * transportTime
+    const rounded = Math.round(time*4)/4
+    return rounded
+
   }
 
   purchaseTransport(i: number) {

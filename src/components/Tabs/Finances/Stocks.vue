@@ -148,7 +148,6 @@ export default class Stocks extends Vue {
 
       this.$store.stocks[i].value.push(lastValue + change - (range/2))
       this.$store.stocks[i].value.shift()
-      console.log("---")
     }
   }
 
