@@ -9,7 +9,7 @@
         <h6 class="font-weight-bold">Time spent on Luxuries</h6>
         <h6 class="mt-2">{{ $store.luxuryTime }} hrs</h6>
       </div>
-      <b-form-input type="range" min="0" max="10" step="0.5" number v-model="$store.luxuryTime" @change="updateLuxuryTime"></b-form-input>
+      <b-form-input type="range" min="0" :max="maxLuxuryTime() " step="0.5" number v-model="$store.luxuryTime" @change="updateLuxuryTime"></b-form-input>
     </div>
 
     <!-- Luxury cards -->
@@ -69,8 +69,16 @@ export default class Luxuries extends Vue {
     return LUXURY_ICONS[luxury.toLowerCase()]
   }
 
+  maxLuxuryTime(){
+    return 24-this.$store.totalTime()+this.currentLuxuryTime()
+  }
+
+  currentLuxuryTime(){
+    const luxuries = this.$store.activities.find((act) => act.name == 'Luxuries') ?? { hours: 0 }
+    return luxuries.hours
+  }
+
   updateLuxuryTime() {
-    // TODO: update logic for number of luxury hours changed
     const luxuries = this.$store.activities.find((act) => act.name == 'Luxuries') ?? { hours: 0 }
     luxuries.hours = this.$store.luxuryTime
   }

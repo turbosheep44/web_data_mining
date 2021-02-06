@@ -45,7 +45,7 @@
               </div>
               <div>
                 <font-awesome-icon icon="clock" class="mr-1 text-dark" />
-                <span>{{ transport.time }}</span>
+                <span>{{ getTime(transport.time) }}</span>
               </div>
             </b-col>
           </b-row>
@@ -97,8 +97,16 @@ export default class Transport extends Vue {
         time: 0.5,
       },
     ]
+
+    // Setting the default transport
+    this.$store.transport = 0
     this.visible = Array(this.$store.properties.length).fill(false)
     this.visible[this.$store.transport] = true
+
+    // adding it as an activity
+    this.$store.activities.push({name:'Transport', hours:this.$store.transports[this.$store.transport].time})
+
+    this.$forceUpdate()
   }
 
   toggleVisible(i) {
@@ -106,19 +114,56 @@ export default class Transport extends Vue {
     this.$forceUpdate()
   }
 
+  // Calculate time given the property cost multiplier, rounded to the next 
+  // half hour
+  getTime(transportTime:number){
+    const time = this.$store.properties[this.$store.property].transportCostModifier * transportTime
+    const rounded = Math.round(time*4)/4
+    return rounded
+
+  }
+
   purchaseTransport(i: number) {
-    // TODO: purchase transport logic
-    console.log(`purchase ${i}`)
-    this.$store.transports[i].purchased = true
-    this.$forceUpdate()
+    const toBuy = this.$store.transports[i]
+    console.log("purchase attempt", toBuy.price)
+
+    if(toBuy.price > this.$store.money){
+      this.$notify({
+        group: 'notification',
+        title: toBuy.name + " is too expensive",
+        text: 'You cannot afford it. Please save up more money and try again later'
+      })
+    }else{
+      this.$store.transports[i].purchased = true
+      this.$store.money -= toBuy.price
+      this.$forceUpdate()
+    }
   }
 
   useTransport(i: number) {
-    // TODO: use transport logic
+    const toUse = this.$store.transports[i]
+    console.log(toUse)
+    const currentTransportTime = this.$store.transports[this.$store.transport].time
+    if(toUse.time + this.$store.totalTime() - currentTransportTime > 24){
+      this.$notify({
+        group: 'notification',
+        title: "You do not have enough free time to use the " + toUse.name,
+        text: 'Please allocate enough free time and try again later'
+      })
+    }else{
+      // Update the transport activity
+      // Note: I only made it default to another transport activity because typescript was flagging as a 
+      // possible undefined. When this function runs, it is impossible for it not to find a transport 
+      // activity since the walking would have been set by default.
+      const transport = this.$store.activities.find((act) => { return act.name == 'Transport' }) || {name:"Transport", hours:1}
+      transport.hours = toUse.time
 
-    this.$store.transport = i
-    this.visible.fill(false)
-    this.visible[i] = true
+      this.$store.transport = i
+      this.visible.fill(false)
+      this.visible[i] = true
+
+      this.$forceUpdate()
+    }
   }
 }
 </script>
