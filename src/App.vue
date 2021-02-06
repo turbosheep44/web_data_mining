@@ -1,9 +1,6 @@
 <template>
   <div id="app">
     <Game />
-    <notifications group="revenue" />
-    <notifications group="expense" position="top left" />
-    <notifications group="notification" position="bottom left" />
   </div>
 </template>
 

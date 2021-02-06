@@ -3,12 +3,7 @@
     <h5 class="text-center mt-3">Property</h5>
     <hr class="wide-separator" />
 
-    <b-card
-      v-for="(property, i) in $store.properties"
-      :key="`property-${i}`"
-      no-body
-      :class="['my-3', i == $store.property ? 'owned-property' : '']"
-    >
+    <b-card v-for="(property, i) in $store.properties" :key="`property-${i}`" no-body :class="['my-3', i == $store.property ? 'owned-property' : '']">
       <!-- Header -->
       <b-card-header @click="toggleVisible(i)">
         <div class="d-flex justify-content-between align-items-center">
@@ -34,9 +29,9 @@
             </b-col>
             <b-col>
               <div class="d-flex justify-content-between align-items-start my-2">
-                <span> <font-awesome-icon class="mr-1 text-warning" size="sm" icon="smile" />{{ property.happiness }} </span>
-                <span> <font-awesome-icon class="mr-1 text-success" size="sm" icon="hryvnia" /> {{ property.price | money }} </span>
-                <span> <font-awesome-icon class="mr-1 text-info" size="sm" icon="bicycle" /> {{ property.transportCostModifier }} </span>
+                <span> <font-awesome-icon class="mr-1" size="sm" icon="smile" />{{ property.happiness }} </span>
+                <span> <font-awesome-icon class="mr-1" size="sm" icon="hryvnia" /> {{ property.price | money }} </span>
+                <span> <font-awesome-icon class="mr-1" size="sm" icon="bicycle" /> {{ property.transportCostModifier }} </span>
               </div>
             </b-col>
           </b-row>
@@ -122,35 +117,32 @@ export default class Property extends Vue {
 
   purchaseProperty(p: number) {
     const prop = this.$store.properties[p]
-    if(prop.price > this.$store.money){
-        this.$notify({
+    if (prop.price > this.$store.money) {
+      this.$notify({
         group: 'notification',
-        title: prop.name + " is too expensive",
-        text: 'You cannot afford it. Please save up more money and try again later'
+        title: prop.name + ' is too expensive',
+        text: 'You cannot afford it. Please save up more money and try again later',
       })
-      
-    }else{
+    } else {
       const currentTransport = this.$store.transports[this.$store.transport]
-      if( Math.floor((currentTransport.time * prop.transportCostModifier * 4)/4)){
+      if (Math.floor((currentTransport.time * prop.transportCostModifier * 4) / 4)) {
         this.$notify({
           group: 'notification',
-          title: prop.name + " is too far away from work to fit into your schedule",
-          text: 'Allocate more free time and you will be able to purchase this property'
+          title: prop.name + ' is too far away from work to fit into your schedule',
+          text: 'Allocate more free time and you will be able to purchase this property',
         })
-      }else{
+      } else {
         this.$store.property = p
         this.visible.fill(false)
         this.visible[p] = true
 
         this.$notify({
           group: 'notification',
-          title: prop.name + " purchased!",
-          text: 'Congratulations on purchasing this new property!'
+          title: prop.name + ' purchased!',
+          text: 'Congratulations on purchasing this new property!',
         })
       }
-      
     }
-
   }
 }
 </script>

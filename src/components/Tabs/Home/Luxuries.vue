@@ -9,7 +9,7 @@
         <h6 class="font-weight-bold">Time spent on Luxuries</h6>
         <h6 class="mt-2">{{ $store.luxuryTime }} hrs</h6>
       </div>
-      <b-form-input type="range" min="0" :max="maxLuxuryTime() " step="0.5" number v-model="$store.luxuryTime" @change="updateLuxuryTime"></b-form-input>
+      <b-form-input type="range" min="0" :max="maxLuxuryTime()" step="0.5" number v-model="$store.luxuryTime" @change="updateLuxuryTime"></b-form-input>
     </div>
 
     <!-- Luxury cards -->
@@ -23,11 +23,11 @@
       <!-- stats and purchase buttons -->
       <div class="d-flex justify-content-end align-items-center my-2">
         <div class="ml-3">
-          <font-awesome-icon icon="smile" class="mr-1 text-warning" />
+          <font-awesome-icon icon="smile" class="mr-1" />
           {{ luxury.happiness }}
         </div>
         <div class="ml-3">
-          <font-awesome-icon icon="hryvnia" class="mr-1 text-success" />
+          <font-awesome-icon icon="hryvnia" class="mr-1" />
           {{ luxury.upgradePrice }}
         </div>
         <b-btn v-if="luxury.tier < 4" variant="success" class="ml-3 py-1" @click="upgradeLuxury(i)">{{ luxury.tier == 0 ? 'Purchase' : 'Upgrade' }}</b-btn>
@@ -69,11 +69,11 @@ export default class Luxuries extends Vue {
     return LUXURY_ICONS[luxury.toLowerCase()]
   }
 
-  maxLuxuryTime(){
-    return 24-this.$store.totalTime()+this.currentLuxuryTime()
+  maxLuxuryTime() {
+    return 24 - this.$store.totalTime() + this.currentLuxuryTime()
   }
 
-  currentLuxuryTime(){
+  currentLuxuryTime() {
     const luxuries = this.$store.activities.find((act) => act.name == 'Luxuries') ?? { hours: 0 }
     return luxuries.hours
   }

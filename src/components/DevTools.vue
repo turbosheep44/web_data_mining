@@ -60,6 +60,11 @@
           <b-col cols="6"> <b-form-textarea type="number" v-model="activities" no-resize size="sm" rows="3"></b-form-textarea></b-col>
           <b-col cols="2"> <b-button @click="updateActivities">Update</b-button> </b-col>
         </b-row>
+
+        <b-row align-v="center" class="my-3">
+          <b-col cols="4"><h4>Events</h4></b-col>
+          <b-col cols="4"> <b-button @click="simulateEvent">Fire Event</b-button> </b-col>
+        </b-row>
       </b-container>
     </transition>
     <b-button @click="visible = !visible">{{ visible ? 'Hide' : 'Show' }} Dev Tools</b-button>
@@ -68,6 +73,7 @@
 
 <script lang = "ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { Event } from '@/store'
 
 @Component({})
 export default class DevTools extends Vue {
@@ -76,7 +82,7 @@ export default class DevTools extends Vue {
   private activities: string = 'Sleep:8 Luxuries:3'
   private visible: boolean = false
 
-  created() {
+  mounted() {
     this.$on('tick', () => console.log('tick'))
     this.updateExpenses()
     this.updateActivities()
@@ -88,18 +94,41 @@ export default class DevTools extends Vue {
 
   updateExpenses() {
     this.$store.expenses = []
-    // for (const expense of this.expenses.split(' ')) {
-    //   const [name, price] = expense.split(':')
-    //   this.$store.expenses.push({ name, price: parseFloat(price) })
-    // }
-    this.$store.expenses.push({name:'Rent', price:this.$store.rent})
+    for (const expense of this.expenses.split(' ')) {
+      const [name, price] = expense.split(':')
+      this.$store.expenses.push({ name, price: parseFloat(price) })
+    }
+    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
   }
   updateActivities() {
-    // this.$store.activities = []
+    this.$store.activities = []
     for (const activity of this.activities.split(' ')) {
       const [name, price] = activity.split(':')
       this.$store.activities.push({ name, hours: parseFloat(price) })
     }
+  }
+
+  simulateEvent() {
+    this.$store.events.$emit(
+      'event',
+      new Event({
+        text: 'You have crashed your car and will need to pay your insurance excess of €250 or use a different mode of transport.',
+        actions: [
+          { text: 'Pay Excess', callback: () => console.log('pay excess') },
+          { text: 'Use Bus', callback: () => console.log('use bus') },
+        ],
+        effects: { happiness: -5, money: 150 },
+        isBarrierDismissable: false,
+      })
+    )
+    this.$store.events.$emit(
+      'event',
+      new Event({
+        text: 'The compnay you were working for has declared bankrupcy so you have lost your job!',
+        effects: { happiness: -10 },
+        isBarrierDismissable: true,
+      })
+    )
   }
 
   createJobOffers() {

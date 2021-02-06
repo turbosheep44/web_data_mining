@@ -28,8 +28,11 @@ Vue.config.productionTip = false
 
 // COMMON FILTERS
 Vue.filter('money', function(value) {
-  if (typeof value != typeof 0) return value
-  return `€${value.toLocaleString({ style: 'currency' })}`
+  if (typeof value != typeof 0) {
+    console.log(value)
+    return value
+  }
+  return `€${value.toFixed(2)}`
 })
 
 import App from './App.vue'

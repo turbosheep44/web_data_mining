@@ -3,12 +3,7 @@
     <h5 class="text-center">Transport</h5>
     <hr class="wide-separator" />
 
-    <b-card
-      v-for="(transport, i) in $store.transports"
-      :key="`transport-${i}`"
-      no-body
-      :class="['my-3', i == $store.transport ? 'active-transport' : '']"
-    >
+    <b-card v-for="(transport, i) in $store.transports" :key="`transport-${i}`" no-body :class="['my-3', i == $store.transport ? 'active-transport' : '']">
       <!-- Header -->
       <b-card-header @click="toggleVisible(i)">
         <div class="d-flex justify-content-between align-items-center toggle-header">
@@ -36,15 +31,15 @@
             <!-- stats -->
             <b-col cols="7" class="d-flex justify-content-between align-items-center">
               <div>
-                <font-awesome-icon icon="hryvnia" class="mr-1 text-success" />
+                <font-awesome-icon icon="hryvnia" class="mr-1" />
                 <span>{{ transport.price | money }}</span>
               </div>
               <div>
-                <font-awesome-icon icon="calendar" class="mr-1 text-warning" />
+                <font-awesome-icon icon="calendar" class="mr-1" />
                 <span>{{ transport.upkeep | money }}</span>
               </div>
               <div>
-                <font-awesome-icon icon="clock" class="mr-1 text-dark" />
+                <font-awesome-icon icon="clock" class="mr-1" />
                 <span>{{ getTime(transport.time) }}</span>
               </div>
             </b-col>
@@ -104,7 +99,7 @@ export default class Transport extends Vue {
     this.visible[this.$store.transport] = true
 
     // adding it as an activity
-    this.$store.activities.push({name:'Transport', hours:this.$store.transports[this.$store.transport].time})
+    this.$store.activities.push({ name: 'Transport', hours: this.$store.transports[this.$store.transport].time })
 
     this.$forceUpdate()
   }
@@ -114,26 +109,25 @@ export default class Transport extends Vue {
     this.$forceUpdate()
   }
 
-  // Calculate time given the property cost multiplier, rounded to the next 
+  // Calculate time given the property cost multiplier, rounded to the next
   // half hour
-  getTime(transportTime:number){
+  getTime(transportTime: number) {
     const time = this.$store.properties[this.$store.property].transportCostModifier * transportTime
-    const rounded = Math.round(time*4)/4
+    const rounded = Math.round(time * 4) / 4
     return rounded
-
   }
 
   purchaseTransport(i: number) {
     const toBuy = this.$store.transports[i]
-    console.log("purchase attempt", toBuy.price)
+    console.log('purchase attempt', toBuy.price)
 
-    if(toBuy.price > this.$store.money){
+    if (toBuy.price > this.$store.money) {
       this.$notify({
         group: 'notification',
-        title: toBuy.name + " is too expensive",
-        text: 'You cannot afford it. Please save up more money and try again later'
+        title: toBuy.name + ' is too expensive',
+        text: 'You cannot afford it. Please save up more money and try again later',
       })
-    }else{
+    } else {
       this.$store.transports[i].purchased = true
       this.$store.money -= toBuy.price
       this.$forceUpdate()
@@ -144,18 +138,20 @@ export default class Transport extends Vue {
     const toUse = this.$store.transports[i]
     console.log(toUse)
     const currentTransportTime = this.$store.transports[this.$store.transport].time
-    if(toUse.time + this.$store.totalTime() - currentTransportTime > 24){
+    if (toUse.time + this.$store.totalTime() - currentTransportTime > 24) {
       this.$notify({
         group: 'notification',
-        title: "You do not have enough free time to use the " + toUse.name,
-        text: 'Please allocate enough free time and try again later'
+        title: 'You do not have enough free time to use the ' + toUse.name,
+        text: 'Please allocate enough free time and try again later',
       })
-    }else{
+    } else {
       // Update the transport activity
-      // Note: I only made it default to another transport activity because typescript was flagging as a 
-      // possible undefined. When this function runs, it is impossible for it not to find a transport 
+      // Note: I only made it default to another transport activity because typescript was flagging as a
+      // possible undefined. When this function runs, it is impossible for it not to find a transport
       // activity since the walking would have been set by default.
-      const transport = this.$store.activities.find((act) => { return act.name == 'Transport' }) || {name:"Transport", hours:1}
+      const transport = this.$store.activities.find((act) => {
+        return act.name == 'Transport'
+      }) || { name: 'Transport', hours: 1 }
       transport.hours = toUse.time
 
       this.$store.transport = i

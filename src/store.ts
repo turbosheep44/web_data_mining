@@ -14,11 +14,11 @@ export class Store {
 
   // Stocks
   stocks: Stock[] = []
-  risk:number[] = [0.1, 0.2, 0.4]
+  risk: number[] = [0.1, 0.2, 0.4]
 
   // Free time
-  totalTime = () =>{
-    return this.activities.reduce((acc, act) => (act.hours) + acc, 0)
+  totalTime = () => {
+    return this.activities.reduce((acc, act) => act.hours + acc, 0)
   }
 
   // Job
@@ -74,7 +74,7 @@ interface Stock {
   value: number[]
   owned: number
   visible: boolean
-  invested:number
+  invested: number
 }
 
 interface Job {
@@ -99,6 +99,26 @@ interface Transport {
   price: number
   upkeep: number
   time: number
+}
+
+export class Event {
+  text: string = 'Event'
+
+  effects: { happiness?: number; money?: number } = {}
+
+  actions: { text: string; callback: () => void }[] = [
+    {
+      text: 'OK',
+      callback: () => {
+        null
+      },
+    },
+  ]
+  isBarrierDismissable: boolean = true
+
+  constructor(data: Partial<Event>) {
+    Object.assign(this, data)
+  }
 }
 
 export class StorePlugin implements PluginObject<void> {

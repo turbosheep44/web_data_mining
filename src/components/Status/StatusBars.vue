@@ -7,7 +7,7 @@
       <b-col cols="9" class="px-0">
         <b-progress class="m-3" :value="bar.value" :max="bar.max" :variant="bar.variant" />
       </b-col>
-      <b-col cols="1 p-0">
+      <b-col cols="1" class="p-0 text-nowrap">
         <p class="font-italic m-0">{{ bar.label }}</p>
       </b-col>
     </b-row>
@@ -31,9 +31,16 @@ export default class StatusBars extends Vue {
       {
         value: this.$store.money,
         max: 10000,
-        label: `€${(this.$store.money).toFixed(2)}`,
+        label: `€${this.$store.money.toFixed(2)}`,
         variant: 'success',
         icon: 'hryvnia',
+      },
+      {
+        value: this.$store.totalTime(),
+        max: 24,
+        label: `${this.$store.totalTime()} hrs`,
+        variant: 'danger',
+        icon: 'clock',
       },
     ]
   }

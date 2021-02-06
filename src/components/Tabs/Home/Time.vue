@@ -16,7 +16,7 @@
     <PieChart :chart-data="activityData()" :options="options" style="height: 300px"></PieChart>
 
     <!-- Totals -->
-    <div class="mt-3">.</div>
+    <div class="mt-3" style="color: transparent; user-select: none">.</div>
     <div v-for="activity in activitiesWithFree()" :key="activity.name" class="d-flex justify-content-between align-items-center">
       <span>{{ activity.name }}</span>
       <span class="text-right text-danger">{{ activity.hours }} hrs</span>
