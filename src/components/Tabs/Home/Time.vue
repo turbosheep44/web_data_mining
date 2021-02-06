@@ -65,7 +65,6 @@ export default class Time extends Vue {
 
   activityData() {
     return {
-      
       labels: this.activitiesWithFree().map((activity) => activity.name),
       datasets: [
         {
@@ -80,21 +79,21 @@ export default class Time extends Vue {
     }
   }
 
-  maxSleep(){
-    return 24-this.$store.totalTime()+this.currentSleepTime()
+  maxSleep() {
+    return Math.min(24 - this.$store.totalTime() + this.currentSleepTime(), 10)
   }
 
-  currentSleepTime(){
+  currentSleepTime() {
     const sleep = this.$store.activities.find((act) => act.name == 'Sleep') ?? { hours: 0 }
     return sleep.hours
   }
 
   activitiesWithFree() {
     const timeUsed = this.$store.totalTime()
-    if(timeUsed == 24) return this.$store.activities
-    
+    if (timeUsed == 24) return this.$store.activities
+
     const withFree = this.$store.activities.slice()
-    withFree.push({name:'Free Time', hours:24-timeUsed})
+    withFree.push({ name: 'Free Time', hours: 24 - timeUsed })
     // console.log("with free", withFree)
     return withFree
   }

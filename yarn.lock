@@ -8945,6 +8945,11 @@ vue-class-component@^7.2.3:
   resolved "https://registry.npm.taobao.org/vue-class-component/download/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
   integrity sha1-hHHgN7jkdi9aRkaG4Z5a/HCFAuQ=
 
+vue-country-flag@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/vue-country-flag/-/vue-country-flag-2.0.3.tgz#f644d8f5150a97f473f0c13e04622c6ede37d1de"
+  integrity sha512-QZM3hNNhnGU+G1qnpq1BiICE4Zh91UA++/UpM0go8XbxkVxTiPy4asWY07vL/3PtW8M69YqWVbhwG13rzvNwkA==
+
 vue-eslint-parser@^7.0.0:
   version "7.3.0"
   resolved "https://registry.npm.taobao.org/vue-eslint-parser/download/vue-eslint-parser-7.3.0.tgz?cache=0&sync_timestamp=1608031066427&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-eslint-parser%2Fdownload%2Fvue-eslint-parser-7.3.0.tgz#894085839d99d81296fa081d19643733f23d7559"
