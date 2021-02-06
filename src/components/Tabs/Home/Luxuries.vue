@@ -13,22 +13,30 @@
     </div>
 
     <!-- Luxury cards -->
-    <b-card v-for="luxury in $store.luxuries" :key="luxury.name" class="my-2">
+    <b-card v-for="(luxury, i) in $store.luxuries" :key="luxury.name" class="my-2">
+      <!-- description -->
       <font-awesome-icon :icon="icon(luxury.name)" class="mr-2" />
       <b>{{ luxury.name }}</b>
       <br />
       {{ luxury.description }}
 
-      <div class="d-flex justify-content-end align-items-center">
+      <!-- stats and purchase buttons -->
+      <div class="d-flex justify-content-end align-items-center my-2">
         <div class="ml-3">
           <font-awesome-icon icon="smile" class="mr-1 text-warning" />
-          10
+          {{ luxury.happiness }}
         </div>
         <div class="ml-3">
           <font-awesome-icon icon="hryvnia" class="mr-1 text-success" />
-          10
+          {{ luxury.upgradePrice }}
         </div>
-        <b-btn variant="success" class="ml-3 py-1">Upgrade</b-btn>
+        <b-btn v-if="luxury.tier < 4" variant="success" class="ml-3 py-1" @click="upgradeLuxury(i)">{{ luxury.tier == 0 ? 'Purchase' : 'Upgrade' }}</b-btn>
+        <b-btn v-else variant="outline-dark" disabled class="ml-3 py-1">Max Tier</b-btn>
+      </div>
+
+      <!-- tier indicator -->
+      <div class="d-flex justify-content-end align-items-center indicator-group">
+        <div v-for="e in 4" :key="e" :class="['indicator', { 'indicator-active': e <= luxury.tier }]"></div>
       </div>
     </b-card>
   </div>
@@ -49,11 +57,11 @@ const LUXURY_ICONS = {
 export default class Luxuries extends Vue {
   created() {
     this.$store.luxuries = [
-      { name: 'Television', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-      { name: 'Pool', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-      { name: 'Computer', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-      { name: 'Air Conditioning', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-      { name: 'Coffee Machine', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+      { name: 'Television', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
+      { name: 'Pool', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
+      { name: 'Computer', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
+      { name: 'Air Conditioning', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
+      { name: 'Coffee Machine', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
     ]
   }
 
@@ -66,8 +74,39 @@ export default class Luxuries extends Vue {
     const luxuries = this.$store.activities.find((act) => act.name == 'Luxuries') ?? { hours: 0 }
     luxuries.hours = this.$store.luxuryTime
   }
+
+  upgradeLuxury(i: number) {
+    // TODO: update logic for upgrading luxury
+    this.$store.luxuries[i].tier++
+    this.$forceUpdate()
+  }
 }
 </script>
 
-<style>
+<style lang="scss">
+@import 'bootstrap/scss/_mixins.scss';
+@import 'bootstrap/scss/_functions.scss';
+@import 'bootstrap/scss/_variables.scss';
+
+.indicator-group {
+  margin: 0 (-$spacer * 1.25) (-$spacer * 1.25) (-$spacer * 1.25);
+
+  .indicator {
+    width: 25%;
+    height: 0.25em;
+    background-color: lightgray;
+    transition: background-color 0.4s;
+
+    &-active {
+      background-color: darken($color: lightblue, $amount: 10);
+    }
+
+    &:not(:first-child) {
+      margin-left: 1%;
+    }
+    &:not(:last-child) {
+      margin-right: 1%;
+    }
+  }
+}
 </style>

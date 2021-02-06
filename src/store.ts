@@ -48,6 +48,9 @@ export class Store {
 interface Luxury {
   name: string
   description: string
+  tier: number
+  upgradePrice: number
+  happiness: number
 }
 
 interface Expense {
