@@ -55,8 +55,9 @@ interface Luxury {
   name: string
   description: string
   tier: number
-  upgradePrice: number
+  basePrice: number
   happiness: number
+  multiplier : number
 }
 
 interface Expense {

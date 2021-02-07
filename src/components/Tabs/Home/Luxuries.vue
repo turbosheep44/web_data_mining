@@ -28,7 +28,7 @@
         </div>
         <div class="ml-3">
           <font-awesome-icon icon="hryvnia" class="mr-1" />
-          {{ luxury.upgradePrice }}
+          {{ getUpgradePrice (i) == -1 ? "---" : getUpgradePrice(i) }}
         </div>
         <b-btn v-if="luxury.tier < 4" variant="success" class="ml-3 py-1" @click="upgradeLuxury(i)">{{ luxury.tier == 0 ? 'Purchase' : 'Upgrade' }}</b-btn>
         <b-btn v-else variant="outline-dark" disabled class="ml-3 py-1">Max Tier</b-btn>
@@ -57,11 +57,11 @@ const LUXURY_ICONS = {
 export default class Luxuries extends Vue {
   created() {
     this.$store.luxuries = [
-      { name: 'Television', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
-      { name: 'Pool', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
-      { name: 'Computer', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
-      { name: 'Air Conditioning', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
-      { name: 'Coffee Machine', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, upgradePrice: 150, happiness: 5 },
+      { name: 'Television', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 150, happiness: 5, multiplier:4},
+      { name: 'Pool', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 10000, happiness: 5, multiplier:3},
+      { name: 'Computer', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 1000, happiness: 5, multiplier:2},
+      { name: 'Air Conditioning', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 100, happiness: 5, multiplier:8},
+      { name: 'Coffee Machine', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 20, happiness: 5, multiplier:4 },
     ]
   }
 
@@ -84,9 +84,33 @@ export default class Luxuries extends Vue {
   }
 
   upgradeLuxury(i: number) {
-    // TODO: update logic for upgrading luxury
+    const luxury = this.$store.luxuries[i]
+    if(luxury.tier == 4) return
+
+    const newPrice = this.getUpgradePrice(i)
+    if(this.$store.money < newPrice){
+      this.$notify({
+        group: 'notification',
+        title: luxury.name + ' is too expensive',
+        text: 'You cannot afford it. Please save up more money and try again later',
+      })
+
+      return
+    }
+
     this.$store.luxuries[i].tier++
+    this.$store.money -= newPrice
     this.$forceUpdate()
+  }
+
+  getUpgradePrice(i: number):number{
+    const luxury = this.$store.luxuries[i]
+    if(luxury.tier == 4){
+      return -1
+    }
+
+    const mult = Math.pow(luxury.multiplier, luxury.tier+1)
+    return luxury.basePrice*mult
   }
 }
 </script>

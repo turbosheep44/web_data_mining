@@ -101,7 +101,7 @@ export default class DevTools extends Vue {
     this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
   }
   updateActivities() {
-    this.$store.activities = []
+    // this.$store.activities = []
     for (const activity of this.activities.split(' ')) {
       const [name, price] = activity.split(':')
       this.$store.activities.push({ name, hours: parseFloat(price) })
