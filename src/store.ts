@@ -5,7 +5,7 @@ export class Store {
 
   // Stats
   happiness: number = 0.75
-  money: number = 3000
+  money: number = 3000000
 
   // Money
   expenses: Expense[] = []
@@ -46,6 +46,7 @@ export class Store {
 
   // Luxuries
   luxuryTime: number = 3
+  standardLuxuryTime: number = 3
   luxuries: Luxury[]
 
   events: _Vue = new _Vue()
@@ -56,7 +57,8 @@ interface Luxury {
   description: string
   tier: number
   basePrice: number
-  happiness: number
+  baseHappiness: number 
+  currentHappiness :number
   multiplier : number
 }
 

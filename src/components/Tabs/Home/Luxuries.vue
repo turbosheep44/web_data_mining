@@ -9,6 +9,12 @@
         <h6 class="font-weight-bold">Time spent on Luxuries</h6>
         <h6 class="mt-2">{{ $store.luxuryTime }} hrs</h6>
       </div>
+      <div class="d-flex align-items-center justify-content-between">
+        <h6 class="font-weight-bold">Happiness Gained p/w</h6>
+        <h6 class="mt-2">{{ getTotalHappiness() }} {{ getHappinessPerWeek()}} <font-awesome-icon icon="smile" class="mr-1" /> </h6>
+
+        
+      </div>
       <b-form-input type="range" min="0" :max="maxLuxuryTime()" step="0.5" number v-model="$store.luxuryTime" @change="updateLuxuryTime"></b-form-input>
     </div>
 
@@ -24,7 +30,7 @@
       <div class="d-flex justify-content-end align-items-center my-2">
         <div class="ml-3">
           <font-awesome-icon icon="smile" class="mr-1" />
-          {{ luxury.happiness }}
+          {{ getCurrentHappiness(i) }}, {{ luxury.baseHappiness - luxury.tier -1}}
         </div>
         <div class="ml-3">
           <font-awesome-icon icon="hryvnia" class="mr-1" />
@@ -57,11 +63,11 @@ const LUXURY_ICONS = {
 export default class Luxuries extends Vue {
   created() {
     this.$store.luxuries = [
-      { name: 'Television', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 150, happiness: 5, multiplier:4},
-      { name: 'Pool', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 10000, happiness: 5, multiplier:3},
-      { name: 'Computer', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 1000, happiness: 5, multiplier:2},
-      { name: 'Air Conditioning', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 100, happiness: 5, multiplier:8},
-      { name: 'Coffee Machine', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 20, happiness: 5, multiplier:4 },
+      { name: 'Television', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 150, baseHappiness: 5, currentHappiness:0, multiplier:4},
+      { name: 'Pool', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 10000, baseHappiness: 5,currentHappiness:0, multiplier:3},
+      { name: 'Computer', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 1000, baseHappiness: 5,currentHappiness:0, multiplier:2},
+      { name: 'Air Conditioning', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 100, baseHappiness: 5,currentHappiness:0, multiplier:8},
+      { name: 'Coffee Machine', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', tier: 0, basePrice: 20, baseHappiness: 5,currentHappiness:0, multiplier:4 },
     ]
   }
 
@@ -83,6 +89,28 @@ export default class Luxuries extends Vue {
     luxuries.hours = this.$store.luxuryTime
   }
 
+  getCurrentHappiness (i:number) {
+    const luxury = this.$store.luxuries[i]
+
+    let total = 0
+    for(let j = 0; j < luxury.tier; j ++) total += (luxury.baseHappiness-j-1)
+    
+    return total
+  }
+
+  getHappinessPerWeek(){
+    let hpw = this.getTotalHappiness() 
+    
+    const multiplier = this.$store.luxuryTime/this.$store.standardLuxuryTime
+    hpw = Math.round(hpw * multiplier * 4) / 4
+
+    return hpw
+  }
+
+  getTotalHappiness(){
+    return this.$store.luxuries.reduce((pv, cv)=> { return pv + cv.currentHappiness; }, 0);
+  }
+
   upgradeLuxury(i: number) {
     const luxury = this.$store.luxuries[i]
     if(luxury.tier == 4) return
@@ -100,6 +128,7 @@ export default class Luxuries extends Vue {
 
     this.$store.luxuries[i].tier++
     this.$store.money -= newPrice
+    this.$store.luxuries[i].currentHappiness += (luxury.baseHappiness-luxury.tier)
     this.$forceUpdate()
   }
 
