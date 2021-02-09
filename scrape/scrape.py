@@ -16,7 +16,7 @@ class Extract_table:
         self.Table = page.find("table", {'class':'data_wide_table'})
     def extract(self):
         if not self.Table:
-            return None #check if it is in the formate.
+            return None
         for row in self.Table("tr"):
             if row("th"):
                 key = row("th")[0].text.replace("\n", "")
