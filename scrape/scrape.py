@@ -11,12 +11,10 @@ def clean(s):
     return cache[s]
 
 class Extract_table:
-    """ Extracts the table from the beautiful soup html page"""
     def __init__(self, page):
         self.Data = {}
-        self.Table = page.find("table", {'class':'data_wide_table'}) #finding table with class name
+        self.Table = page.find("table", {'class':'data_wide_table'})
     def extract(self):
-        """A method to extract the table contents and store to a dict"""
         if not self.Table:
             return None #check if it is in the formate.
         for row in self.Table("tr"):
@@ -84,4 +82,4 @@ results = {}
 for country in COUNTRIES:
     obj = API(URL, country)
     results[country] = obj.get_result()
-write_json("results.json",results) #uncomment to save the results.
+write_json("results.json",results)
