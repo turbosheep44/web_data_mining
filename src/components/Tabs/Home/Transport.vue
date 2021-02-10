@@ -1,8 +1,29 @@
 <template>
   <div>
-    <h5 class="text-center">Transport</h5>
+    <h5 class="text-center">Happiness Factors</h5>
     <hr class="wide-separator" />
 
+    <b-card v-for="(factor, i) in $store.happinessFactors" :key="`factor-${i}`" no-body :class="''">
+      <!-- Header -->
+      <b-card-header @click="toggleVisible(i)">
+        <div class="d-flex justify-content-between align-items-center toggle-header">
+          <div class="d-flex align-items-center">
+            <h6 class="mb-0">{{ factor.name }}</h6>
+            </div>
+          <font-awesome-icon icon="chevron-down" :class="['chevron', visible[i] ? 'chevron-open' : '']" />
+        </div>
+      </b-card-header>
+
+      <!-- Body -->
+      <b-collapse v-model="visible[i]">
+        <b-card-body>
+          <p>{{factor.name}} value:{{ factor.factor }}</p>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+
+    <h5 class="text-center">Transport</h5>
+    <hr class="wide-separator" />
     <b-card v-for="(transport, i) in $store.transports" :key="`transport-${i}`" no-body :class="['my-3', i == $store.transport ? 'active-transport' : '']">
       <!-- Header -->
       <b-card-header @click="toggleVisible(i)">
@@ -58,6 +79,8 @@ export default class Transport extends Vue {
   private visible: boolean[]
 
   created() {
+
+
     this.$store.transports = [
       {
         name: 'Walk',
@@ -99,7 +122,8 @@ export default class Transport extends Vue {
     this.visible[this.$store.transport] = true
 
     // adding it as an activity
-    this.$store.activities.push({ name: 'Transport', hours: this.$store.transports[this.$store.transport].time })
+    const roundedTime = Math.round(this.$store.properties[this.$store.property].transportCostModifier * this.$store.transports[this.$store.transport].time*4)/ 4
+    this.$store.activities.push({ name: 'Transport', hours:roundedTime})
 
     this.$forceUpdate()
   }
@@ -119,8 +143,6 @@ export default class Transport extends Vue {
 
   purchaseTransport(i: number) {
     const toBuy = this.$store.transports[i]
-    console.log('purchase attempt', toBuy.price)
-
     if (toBuy.price > this.$store.money) {
       this.$notify({
         group: 'notification',
@@ -136,7 +158,6 @@ export default class Transport extends Vue {
 
   useTransport(i: number) {
     const toUse = this.$store.transports[i]
-    console.log(toUse)
     const currentTransportTime = this.$store.transports[this.$store.transport].time
     if (toUse.time + this.$store.totalTime() - currentTransportTime > 24) {
       this.$notify({
