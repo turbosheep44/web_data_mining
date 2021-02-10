@@ -104,6 +104,8 @@ export default class Luxuries extends Vue {
     const multiplier = this.$store.luxuryTime/this.$store.standardLuxuryTime
     hpw = Math.round(hpw * multiplier * 4) / 4
 
+    this.$store.currentLuxuryHappiness = hpw
+
     return hpw
   }
 

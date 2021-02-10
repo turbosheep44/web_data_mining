@@ -36,11 +36,26 @@ export default class Game extends Vue {
       this.$store.events.$emit('tick')
     }, 1000)
 
+    this.$store.events.$on('tick-month', this.calculateHappiness)
+
     this.$store.events.$on('event', (e: Event) => {
       if (!this.event) this.event = e
       else this.eventBacklog.push(e)
     })
   }
+
+  calculateHappiness(){
+    const sleepFactor = Math.ceil(Math.abs(this.$store.sleep-8)) * 3
+    const workFactor = this.$store.job.hours > 8 ? Math.ceil(Math.abs(this.$store.job.hours - 8)) * 4 : 0
+    const luxuryFactor = this.$store.currentLuxuryHappiness
+
+    const tempHappiness = luxuryFactor - sleepFactor - workFactor
+    const newHappiness = Math.max(this.$store.properties[this.$store.property].happiness, tempHappiness)
+
+    return newHappiness
+  }
+
+
 
   nextEvent() {
     this.event = null

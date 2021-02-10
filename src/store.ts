@@ -5,6 +5,7 @@ export class Store {
 
   // Stats
   happiness: number = 0.75
+  constantHappinessDecay:number = 0.05
   money: number = 3000000
 
   // Money
@@ -47,6 +48,7 @@ export class Store {
   // Luxuries
   luxuryTime: number = 3
   standardLuxuryTime: number = 3
+  currentLuxuryHappiness:number = 0
   luxuries: Luxury[]
 
   events: _Vue = new _Vue()
