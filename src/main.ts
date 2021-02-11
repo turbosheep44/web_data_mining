@@ -17,24 +17,25 @@ Vue.use(SimpleStore)
 
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHryvnia, faSmile, faCalendar, faUser, faChevronDown, faHome, faBuilding, faBicycle } from '@fortawesome/free-solid-svg-icons'
-import { faClock, faTv, faSwimmingPool, faCoffee, faLaptop, faFan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faHryvnia, faSmile, faCalendar, faUser, faChevronDown, faHome, faBuilding, faBicycle } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faTv, faSwimmingPool, faCoffee, faLaptop, faFan, faFilm, faGamepad, faShoppingBag } from '@fortawesome/free-solid-svg-icons'
+import { faHamburger, faUtensils, faConciergeBell, faFutbol, faTableTennis, faDumbbell } from '@fortawesome/free-solid-svg-icons'
 library.add(faHryvnia, faSmile, faCalendar, faUser, faChevronDown, faHome, faBuilding, faBicycle)
-library.add(faClock, faTv, faSwimmingPool, faCoffee, faLaptop, faFan)
+library.add(faClock, faTv, faSwimmingPool, faCoffee, faLaptop, faFan, faFilm, faGamepad, faShoppingBag)
+library.add(faHamburger, faUtensils, faConciergeBell, faFutbol, faTableTennis, faDumbbell)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-Vue.config.productionTip = false
-
 // COMMON FILTERS
-Vue.filter('money', function(value) {
+Vue.filter('money', function(value, showCents = false, currencySymbol = false) {
   if (typeof value != typeof 0) {
     console.log(value)
     return value
   }
-  return `€${value.toFixed(2)}`
+  return `${currencySymbol ? '€' : ''}${value.toFixed(showCents ? 2 : 0)}`
 })
 
+Vue.config.productionTip = false
 import App from './App.vue'
 new Vue({
   render: h => h(App),

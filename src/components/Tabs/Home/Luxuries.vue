@@ -28,7 +28,7 @@
         </div>
         <div class="ml-3">
           <font-awesome-icon icon="hryvnia" class="mr-1" />
-          {{ luxury.upgradePrice }}
+          {{ luxury.upgradePrice | money }}
         </div>
         <b-btn v-if="luxury.tier < 4" variant="success" class="ml-3 py-1" @click="upgradeLuxury(i)">{{ luxury.tier == 0 ? 'Purchase' : 'Upgrade' }}</b-btn>
         <b-btn v-else variant="outline-dark" disabled class="ml-3 py-1">Max Tier</b-btn>

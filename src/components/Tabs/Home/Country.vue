@@ -39,11 +39,11 @@
         <b-col>{{ name }}</b-col>
         <transition name="fade">
           <b-col :class="['text-right country-expense', comparePrice > price ? 'text-danger' : 'text-success']" v-if="selectedCountry != $store.country">
-            {{ comparePrice | money }}
+            {{ comparePrice | money(true, true) }}
           </b-col>
         </transition>
         <b-col :class="['text-right country-expense', comparePrice < price ? 'text-danger' : 'text-success']">
-          {{ price | money }}
+          {{ price | money(true, true) }}
         </b-col>
       </b-row>
 
@@ -68,8 +68,6 @@ import { Component, Vue } from 'vue-property-decorator'
 import info from '@/assets/countries.json'
 import convert from '@/assets/convert.json'
 import flags from '@/assets/flags.json'
-
-//? A: Please let me know if this is the right place to mount this component
 import CountryFlag from 'vue-country-flag'
 
 @Component({
@@ -101,6 +99,7 @@ export default class Country extends Vue {
     console.log(`relocate from ${this.$store.country} to ${this.selectedCountry}`)
 
     this.$store.country = this.selectedCountry
+    this.$store.events.$emit('relocate')
   }
 
   expenses(country: string = this.$store.country): Expense[] {

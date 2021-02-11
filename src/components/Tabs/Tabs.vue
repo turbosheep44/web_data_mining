@@ -2,8 +2,8 @@
   <div>
     <b-card no-body>
       <b-tabs card>
-        <b-tab title="Leisure">{{ this.$store.tickCount }} </b-tab>
-        <b-tab title="Home" active><Home /></b-tab>
+        <b-tab title="Leisure" active><Leisure /></b-tab>
+        <b-tab title="Home"><Home /></b-tab>
         <b-tab title="Finances"><Finances /></b-tab>
       </b-tabs>
     </b-card>
@@ -14,9 +14,10 @@
 import { Component, Vue } from 'vue-property-decorator'
 import Finances from '@/components/Tabs/Finances/Finances.vue'
 import Home from '@/components/Tabs/Home/Home.vue'
+import Leisure from '@/components/Tabs/Leisure/Leisure.vue'
 
 @Component({
-  components: { Finances, Home },
+  components: { Finances, Home, Leisure },
 })
 export default class Tabs extends Vue {}
 </script>

@@ -15,15 +15,13 @@
 </template>
 
 <script lang= "ts">
-import { Component, Ref, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 
 const TICK_MONTH = 4
 const TICK_YEAR = 12 * TICK_MONTH
 
 @Component({})
 export default class Time extends Vue {
-  @Ref('counters') readonly counters!: HTMLDivElement[]
-
   created() {
     this.$store.events.$on('tick', this.onTick)
   }
@@ -35,8 +33,7 @@ export default class Time extends Vue {
       this.$store.events.$emit('month_passed')
     }
 
-    if (this.$store.jobSearchTargetTick != -1 && this.$store.jobSearchTargetTick == this.$store.tickCount)
-      this.$store.events.$emit('jobs_found')
+    if (this.$store.jobSearchTargetTick != -1 && this.$store.jobSearchTargetTick == this.$store.tickCount) this.$store.events.$emit('jobs_found')
   }
 
   currentWeek() {
