@@ -24,13 +24,13 @@
           </div>
           <b-row align-content="between" align-v="center">
             <b-col cols="4">
-              <b-btn v-if="$store.property != i" class="py-1" variant="success" @click="purchaseProperty(i)">Purchase</b-btn>
+              <b-btn v-if="$store.property != i" class="py-1" variant="success" @click="purchaseProperty(i)">{{ property.isRent ? 'Rent' : 'Purchase' }}</b-btn>
               <b-btn v-else class="py-1" disabled variant="outline-success">Owned</b-btn>
             </b-col>
             <b-col>
               <div class="d-flex justify-content-between align-items-start my-2">
                 <span> <font-awesome-icon class="mr-1" size="sm" icon="smile" />{{ property.happiness }} </span>
-                <span> <font-awesome-icon class="mr-1" size="sm" icon="hryvnia" /> {{ property.price | money }} </span>
+                <span> <font-awesome-icon class="mr-1" size="sm" icon="hryvnia" /> {{ property.price | money }} {{ property.isRent ? ' p/m' : '' }}</span>
                 <span> <font-awesome-icon class="mr-1" size="sm" icon="bicycle" /> {{ property.transportCostModifier }} </span>
               </div>
             </b-col>
@@ -48,13 +48,13 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class Property extends Vue {
   private visible: boolean[]
 
-  created() {
-    this.$store.properties = [
+  relocated(){
+     this.$store.properties = [
       {
         name: 'Apartment',
         description: 'Central location \n100 m²',
         isRent: true,
-        price: 1000,
+        price: this.$store.currentCountry["incityapRent"],
         transportCostModifier: 0.5,
         happiness: 10,
       },
@@ -62,7 +62,7 @@ export default class Property extends Vue {
         name: 'Penthouse',
         description: 'Central location\n250 m²',
         isRent: true,
-        price: 2100,
+        price: this.$store.currentCountry["incityapRent"] + 1100,
         transportCostModifier: 0.4,
         happiness: 20,
       },
@@ -70,7 +70,7 @@ export default class Property extends Vue {
         name: 'Apartment',
         description: 'Suburban neighbourhood\n130 m²',
         isRent: true,
-        price: 600,
+        price: this.$store.currentCountry["outcityapRent"],
         transportCostModifier: 1,
         happiness: 15,
       },
@@ -78,7 +78,7 @@ export default class Property extends Vue {
         name: 'Apartment',
         description: 'Quiet neighbourhood\n100 m²',
         isRent: false,
-        price: 120000,
+        price: 100000 + this.$store.currentCountry["outcityapBuy"],
         transportCostModifier: 1,
         happiness: 16,
       },
@@ -86,7 +86,7 @@ export default class Property extends Vue {
         name: 'House',
         description: 'Quiet location\n250 m²',
         isRent: false,
-        price: 200000,
+        price: 200000 + this.$store.currentCountry["incityapBuy"],
         transportCostModifier: 1,
         happiness: 10,
       },
@@ -94,11 +94,17 @@ export default class Property extends Vue {
         name: 'Mansion',
         description: 'Beautiful scenery\nFar from town\n500 m²',
         isRent: false,
-        price: 200000,
+        price: 200000 + this.$store.currentCountry["incityapBuy"],
         transportCostModifier: 1.4,
         happiness: 10,
       },
     ]
+    this.$forceUpdate()
+  }
+
+  created() {
+    this.relocated()
+    this.$store.events.$on("relocate", this.relocated)
     this.visible = Array(this.$store.properties.length).fill(false)
   }
 

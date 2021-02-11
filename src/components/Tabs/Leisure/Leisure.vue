@@ -25,8 +25,8 @@ export default class Leisure extends Vue {
 
   private food: Activity[] = [
     { name: 'Fast Food', icon: 'hamburger', relocationKey: 'fastfood', happiness: 1, time: 0.5, cost: 0 } as Activity,
-    { name: 'Restaurant', icon: 'utensils', relocationKey: 'inexpensive_rest', happiness: 4, time: 1.5, cost: 0 } as Activity,
-    { name: 'Fancy Restaurant', icon: 'concierge-bell', relocationKey: 'expensive_rest', happiness: 10, time: 3, cost: 0 } as Activity,
+    { name: 'Restaurant', icon: 'utensils', relocationKey: 'inexpensiveRest', happiness: 4, time: 1.5, cost: 0 } as Activity,
+    { name: 'Fancy Restaurant', icon: 'concierge-bell', relocationKey: 'expensiveRest', happiness: 10, time: 3, cost: 0 } as Activity,
   ]
 
   private sport: Activity[] = [
