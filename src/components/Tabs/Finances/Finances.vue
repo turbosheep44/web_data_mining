@@ -20,6 +20,12 @@ import Work from '@/components/Tabs/Finances/Work.vue'
 export default class Finances extends Vue {
   mounted() {
     this.$store.events.$on('tick-month', this.calculateExpensesAndRevenues)
+
+
+    // Just for start
+    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
+    this.$store.expenses.push({ name: 'Food', price: this.$store.rent })
+    this.$store.expenses.push({ name: 'Internet', price: this.$store.rent })
   }
 
   calculateExpensesAndRevenues() {
@@ -38,30 +44,12 @@ export default class Finances extends Vue {
     }
 
     // expenses
-    // transport expenses
-    if(this.$store.transport != -1 && this.$store.transports[this.$store.transport].upkeep != 0){
-      const transport = this.$store.transports[this.$store.transport]
-      this.$notify({
-        group: 'expense',
-        title: transport.name + " upkeep expense",
-        text: '$' + transport.upkeep + " deducted from your account"
-      })
-    }
-    // rent
-    this.$store.money -= this.$store.rent
-    const index = this.$store.expenses.findIndex((exp) => { return exp.name == 'Rent'})
-    if(index == -1)    this.$store.expenses.push({ name:'Rent', price: this.$store.rent })
-    else if(this.$store.expenses[index].price != this.$store.rent){
-      this.$store.expenses[index].price = this.$store.rent
-      this.$forceUpdate()
-    }
+    const totalExpenses = this.$store.expenses.reduce((sum, expense) => sum+expense.price, 0)
+    this.$store.money -= totalExpenses
+
     this.$forceUpdate()
-    this.$notify({
-      group: 'expense',
-      title: 'Rent',
-      text: '$' + this.$store.rent + ' for Rent removed from account.',
-    })
   }
+    
 }
 </script>
 

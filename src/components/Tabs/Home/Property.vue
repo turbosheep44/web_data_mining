@@ -150,6 +150,12 @@ export default class Property extends Vue {
           text: 'Congratulations on purchasing this new property!',
         })
 
+        // Update expense cost of rent
+        if(prop.isRent){
+          const rentIndex = this.$store.expenses.findIndex((item) => item.name=="Rent")
+          this.$store.expenses[rentIndex].price = prop.price
+        }
+
         const transportIndex = this.$store.activities.findIndex((activity) => activity.name == "Transport")
         this.$store.activities[transportIndex].hours = proposedTransport
       }

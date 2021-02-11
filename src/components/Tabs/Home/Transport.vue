@@ -152,6 +152,7 @@ export default class Transport extends Vue {
     } else {
       this.$store.transports[i].purchased = true
       this.$store.money -= toBuy.price
+
       this.$forceUpdate()
     }
   }
@@ -170,6 +171,16 @@ export default class Transport extends Vue {
       // Note: I only made it default to another transport activity because typescript was flagging as a
       // possible undefined. When this function runs, it is impossible for it not to find a transport
       // activity since the walking would have been set by default.
+
+      // Make the transport an expense
+      const transportIndex = this.$store.expenses.findIndex((item) => item.name=="Transport")
+      if(transportIndex == -1){
+        this.$store.expenses.push({name:"Transport", price:toUse.upkeep})
+      }else{
+        this.$store.expenses[transportIndex].price = toUse.upkeep
+        console.log("Price ", toUse.upkeep)
+      }
+
       const transport = this.$store.activities.find((act) => {
         return act.name == 'Transport'
       }) || { name: 'Transport', hours: 1 }

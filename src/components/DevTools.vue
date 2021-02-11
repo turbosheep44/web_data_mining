@@ -93,13 +93,13 @@ export default class DevTools extends Vue {
   }
 
   updateExpenses() {
-    this.$store.expenses = []
-    if(this.expenses.trim().length != 0)
-      for (const expense of this.expenses.split(' ')) {
-        const [name, price] = expense.split(':')
-        this.$store.expenses.push({ name, price: parseFloat(price) })
-      }
-    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
+    // this.$store.expenses = []
+    // if(this.expenses.trim().length != 0)
+    //   for (const expense of this.expenses.split(' ')) {
+    //     const [name, price] = expense.split(':')
+    //     this.$store.expenses.push({ name, price: parseFloat(price) })
+    //   }
+    
   }
   updateActivities() {
     // this.$store.activities = []
