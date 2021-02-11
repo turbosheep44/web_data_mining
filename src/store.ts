@@ -3,11 +3,13 @@ import _Vue, { PluginObject } from 'vue'
 export class Store {
   tickCount: number = 0
 
-  // Stats
+  // Happiness
   happiness: number = 0.75
-  money: number = 3000
+  constantHappinessDecay:number = 5
+  happinessFactors: HappinessFactor[] = []
 
   // Money
+  money: number = 10000
   expenses: Expense[] = []
   income: number = 1000
   rent: number = 300
@@ -39,22 +41,32 @@ export class Store {
   }
 
   // Transport
+  currentTransportTime:number = 0
   transport: number = -1
   transports: Transport[]
 
   // Luxuries
   luxuryTime: number = 3
+  standardLuxuryTime: number = 3
+  currentLuxuryHappiness:number = 0
   luxuries: Luxury[]
 
   events: _Vue = new _Vue()
+}
+
+interface HappinessFactor {
+  name:string
+  factor:number
 }
 
 interface Luxury {
   name: string
   description: string
   tier: number
-  upgradePrice: number
-  happiness: number
+  basePrice: number
+  baseHappiness: number 
+  currentHappiness :number
+  multiplier : number
 }
 
 interface Expense {

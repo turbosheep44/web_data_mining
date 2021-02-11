@@ -125,7 +125,9 @@ export default class Property extends Vue {
       })
     } else {
       const currentTransport = this.$store.transports[this.$store.transport]
-      if (Math.floor((currentTransport.time * prop.transportCostModifier * 4) / 4)) {
+      const proposedTransport = Math.round(currentTransport.time * prop.transportCostModifier * 4) / 4
+      const freeTime = 24 - this.$store.totalTime()
+      if (freeTime - currentTransport.time + proposedTransport  <= 0) {
         this.$notify({
           group: 'notification',
           title: prop.name + ' is too far away from work to fit into your schedule',
@@ -141,6 +143,9 @@ export default class Property extends Vue {
           title: prop.name + ' purchased!',
           text: 'Congratulations on purchasing this new property!',
         })
+
+        const transportIndex = this.$store.activities.findIndex((activity) => activity.name == "Transport")
+        this.$store.activities[transportIndex].hours = proposedTransport
       }
     }
   }
