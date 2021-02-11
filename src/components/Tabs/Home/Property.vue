@@ -49,7 +49,8 @@ export default class Property extends Vue {
   private visible: boolean[]
 
   relocated(){
-     this.$store.properties = [
+    
+    this.$store.properties = [
       {
         name: 'Apartment',
         description: 'Central location \n100 m²',
@@ -99,6 +100,7 @@ export default class Property extends Vue {
         happiness: 10,
       },
     ]
+    this.$store.rent = this.$store.properties[0].price
     this.$forceUpdate()
   }
 
@@ -152,8 +154,11 @@ export default class Property extends Vue {
 
         // Update expense cost of rent
         if(prop.isRent){
+          this.$store.rent = prop.price
           const rentIndex = this.$store.expenses.findIndex((item) => item.name=="Rent")
           this.$store.expenses[rentIndex].price = prop.price
+        }else{
+          this.$store.rent = 0
         }
 
         const transportIndex = this.$store.activities.findIndex((activity) => activity.name == "Transport")

@@ -18,14 +18,28 @@ import Work from '@/components/Tabs/Finances/Work.vue'
   components: { ColumnView, Expenses, Stocks, Work },
 })
 export default class Finances extends Vue {
-  mounted() {
-    this.$store.events.$on('tick-month', this.calculateExpensesAndRevenues)
 
+  relocated(){
+
+    this.$store.expenses = []
+    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
+    this.$store.expenses.push({ name: 'Food', price: 30*this.$store.currentCountry["water"] 
+    + 30*this.$store.currentCountry["bread"] })
+    this.$store.expenses.push({ name: 'Basic Utilities', price: this.$store.currentCountry["basic"] })
+
+  }
+
+  mounted() {
+
+    this.$store.events.$on("relocate", this.relocated)
+
+    this.$store.events.$on('tick-month', this.calculateExpensesAndRevenues)
 
     // Just for start
     this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
-    this.$store.expenses.push({ name: 'Food', price: this.$store.rent })
-    this.$store.expenses.push({ name: 'Internet', price: this.$store.rent })
+    this.$store.expenses.push({ name: 'Food', price: 30*this.$store.currentCountry["water"] 
+    + 30*this.$store.currentCountry["bread"] })
+    this.$store.expenses.push({ name: 'Basic Utilities', price: this.$store.currentCountry["basic"] })
   }
 
   calculateExpensesAndRevenues() {

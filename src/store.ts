@@ -57,7 +57,7 @@ export class Store {
   money: number = 10000
   expenses: Expense[] = []
   income: number = 1000
-  rent: number = 300
+  rent: number = 852.81 // first maltese property rent price
 
   // Stocks
   stocks: Stock[] = []
