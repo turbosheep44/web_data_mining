@@ -105,6 +105,7 @@ export default class Property extends Vue {
         happiness: 0.1,
       },
     ]
+    this.$store.property = 0
     this.$store.rent = this.$store.properties[0].price
     this.$forceUpdate()
   }

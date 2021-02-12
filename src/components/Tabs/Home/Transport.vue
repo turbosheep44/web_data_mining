@@ -56,7 +56,7 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class Transport extends Vue {
   private visible: boolean[]
 
-  mounted() {
+  relocated(){
     this.$store.transports = [
       {
         name: 'Walk',
@@ -79,18 +79,24 @@ export default class Transport extends Vue {
         description: 'Faster than using a bike but without the upfront cost of a car.',
         purchased: true,
         price: 0,
-        upkeep: 10,
+        upkeep: this.$store.currentCountry["monthlybus"],
         time: 0.75,
       },
       {
         name: 'Car',
         description: 'Fastest way to get to work but with significant upkeep costs.',
         purchased: false,
-        price: 100000,
+        price: this.$store.currentCountry["car1"],
         upkeep: 100,
         time: 0.5,
       },
     ]
+    this.$forceUpdate()
+  }
+
+  mounted() {
+    this.$store.events.$on('relocate', this.relocated)
+    this.relocated()
 
     // Setting the default transport
     this.$store.transport = 0

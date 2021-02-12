@@ -33,7 +33,7 @@ export default class Leisure extends Vue {
   private sport: Activity[] = [
     { name: 'Watch Football Game', icon: 'futbol', relocationKey: 'beer', priceMultiplier: 5, happiness: 1, time: 2, cost: this.$store.currentCountry.beer } as Activity,
     { name: 'Rent Tennis Court', icon: 'table-tennis', relocationKey: 'tennis', happiness: 4, time: 1, cost: this.$store.currentCountry.tennis } as Activity,
-    { name: 'Gym One-Day Membership', icon: 'dumbbell', relocationKey: 'monthlygym', happiness: 10, time: 4, cost: this.$store.currentCountry.monthlygym / 8} as Activity,
+    { name: 'Gym One-Day Membership', icon: 'dumbbell', relocationKey: 'monthlygym', happiness: 10, time: 4, cost: 10} as Activity,
   ]
 }
 </script>
