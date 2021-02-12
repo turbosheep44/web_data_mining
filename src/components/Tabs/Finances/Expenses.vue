@@ -75,7 +75,7 @@ export default class Expenses extends Vue {
     return this.$store.expenses.reduce((acc, expense) => acc + expense.price, 0)
   }
   totalIncome(): number {
-    return this.$store.income
+    return this.$store.job.wage/12
   }
 }
 </script>

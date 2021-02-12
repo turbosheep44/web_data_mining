@@ -18,8 +18,22 @@ import Work from '@/components/Tabs/Finances/Work.vue'
   components: { ColumnView, Expenses, Stocks, Work },
 })
 export default class Finances extends Vue {
+  relocated() {
+    this.$store.expenses = []
+    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
+    this.$store.expenses.push({ name: 'Food', price: 30 * this.$store.currentCountry['water'] + 30 * this.$store.currentCountry['bread'] })
+    this.$store.expenses.push({ name: 'Basic Utilities', price: this.$store.currentCountry['basic'] })
+  }
+
   mounted() {
+    this.$store.events.$on('relocate', this.relocated)
+
     this.$store.events.$on('tick-month', this.calculateExpensesAndRevenues)
+
+    // Just for start
+    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
+    this.$store.expenses.push({ name: 'Food', price: 30 * this.$store.currentCountry['water'] + 30 * this.$store.currentCountry['bread'] })
+    this.$store.expenses.push({ name: 'Basic Utilities', price: this.$store.currentCountry['basic'] })
   }
 
   calculateExpensesAndRevenues() {
@@ -38,32 +52,9 @@ export default class Finances extends Vue {
     }
 
     // expenses
-    // transport expenses
-    if (this.$store.transport != -1 && this.$store.transports[this.$store.transport].upkeep != 0) {
-      const transport = this.$store.transports[this.$store.transport]
-      this.$notify({
-        group: 'expense',
-        title: transport.name + ' upkeep expense',
-        text: '$' + transport.upkeep + ' deducted from your account',
-      })
-    }
+    this.$store.money -= this.$store.totalExpenses()
 
-    // rent
-    this.$store.money -= this.$store.rent
-    const index = this.$store.expenses.findIndex((exp) => {
-      return exp.name == 'Rent'
-    })
-    if (index == -1) this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
-    else if (this.$store.expenses[index].price != this.$store.rent) {
-      this.$store.expenses[index].price = this.$store.rent
-      this.$forceUpdate()
-    }
     this.$forceUpdate()
-    this.$notify({
-      group: 'expense',
-      title: 'Rent',
-      text: '$' + this.$store.rent + ' for Rent removed from account.',
-    })
   }
 }
 </script>

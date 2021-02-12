@@ -1,9 +1,9 @@
 {
-  "incityap_rent": "Rent Apartment (Centre)",
+  "incityapRent": "Rent Apartment (Centre)",
   "internet": "Internet",
   "basic": "Basic Utilities",
-  "inexpensive_rest": "Inexpensive Restaurant",
-  "expensive_rest": "Mid-range Restaurant",
+  "inexpensiveRest": "Inexpensive Restaurant",
+  "expensiveRest": "Mid-range Restaurant",
   "fastfood": "McMeal at McDonalds",
   "onewaybus": "One-way Bus Ticket",
   "gas": "Gasoline (1 liter)",
@@ -37,7 +37,7 @@
   "dress": "Summer Dress",
   "runshoes": "Nike Running Shoes",
   "leathershoes": "Men Leather Shoes",
-  "outcityap_rent": "Rent Apartment (Outside Centre)",
-  "incityap_buy": "Buy Apartment (Centre)",
-  "outcityap_buy": "Buy Apartment (Outside Centre)"
+  "outcityapRent": "Rent Apartment (Outside Centre)",
+  "incityapBuy": "Buy Apartment (Centre)",
+  "outcityapBuy": "Buy Apartment (Outside Centre)"
 }

@@ -19,21 +19,21 @@ import { Activity } from '@/components/Tabs/Leisure/activity'
 })
 export default class Leisure extends Vue {
   private entertainment: Activity[] = [
-    { name: 'Cinema Ticket', icon: 'film', relocationKey: 'cinema', time: 2, happiness: 2, cost: 0 } as Activity,
-    { name: 'Video Game', icon: 'gamepad', relocationKey: 'dress', time: 5, happiness: 6, cost: 0 } as Activity,
-    { name: 'Shopping', icon: 'shopping-bag', relocationKey: 'leathershoes', time: 3, happiness: 8, cost: 0 } as Activity,
+    { name: 'Cinema Ticket', icon: 'film', relocationKey: 'cinema', time: 2, happiness: 2, cost: this.$store.currentCountry.cinema } as Activity,
+    { name: 'Video Game', icon: 'gamepad', relocationKey: 'dress', time: 5, happiness: 6, cost: this.$store.currentCountry.dress } as Activity,
+    { name: 'Shopping', icon: 'shopping-bag', relocationKey: 'leathershoes', time: 3, happiness: 8, cost: this.$store.currentCountry.leathershoes } as Activity,
   ]
 
   private food: Activity[] = [
-    { name: 'Fast Food', icon: 'hamburger', relocationKey: 'fastfood', happiness: 1, time: 0.5, cost: 0 } as Activity,
-    { name: 'Restaurant', icon: 'utensils', relocationKey: 'inexpensive_rest', happiness: 4, time: 1.5, cost: 0 } as Activity,
-    { name: 'Fancy Restaurant', icon: 'concierge-bell', relocationKey: 'expensive_rest', happiness: 10, time: 3, cost: 0 } as Activity,
+    { name: 'Fast Food', icon: 'hamburger', relocationKey: 'fastfood', happiness: 1, time: 0.5, cost: this.$store.currentCountry.fastfood } as Activity,
+    { name: 'Restaurant', icon: 'utensils', relocationKey: 'inexpensiveRest', happiness: 4, time: 1.5, cost: this.$store.currentCountry.inexpensiveRest } as Activity,
+    { name: 'Fancy Restaurant', icon: 'concierge-bell', relocationKey: 'expensiveRest', happiness: 10, time: 3, cost: this.$store.currentCountry.expensiveRest } as Activity,
   ]
 
   private sport: Activity[] = [
-    { name: 'Watch Football Game', icon: 'futbol', relocationKey: 'beer', priceMultiplier: 5, happiness: 1, time: 2, cost: 0 } as Activity,
-    { name: 'Rent Tennis Court', icon: 'table-tennis', relocationKey: 'tennis', happiness: 4, time: 1, cost: 0 } as Activity,
-    { name: 'Gym Membership', icon: 'dumbbell', relocationKey: 'monthlygym', happiness: 10, time: 4, cost: 0 } as Activity,
+    { name: 'Watch Football Game', icon: 'futbol', relocationKey: 'beer', priceMultiplier: 5, happiness: 1, time: 2, cost: this.$store.currentCountry.beer } as Activity,
+    { name: 'Rent Tennis Court', icon: 'table-tennis', relocationKey: 'tennis', happiness: 4, time: 1, cost: this.$store.currentCountry.tennis } as Activity,
+    { name: 'Gym One-Day Membership', icon: 'dumbbell', relocationKey: 'monthlygym', happiness: 10, time: 4, cost: this.$store.currentCountry.monthlygym / 8} as Activity,
   ]
 }
 </script>

@@ -30,7 +30,7 @@
             <b-col>
               <div class="d-flex justify-content-between align-items-start my-2">
                 <span> <font-awesome-icon class="mr-1" size="sm" icon="smile" />{{ property.happiness * 100 }} </span>
-                <span> <font-awesome-icon class="mr-1" size="sm" icon="hryvnia" /> {{ property.price | money }} </span>
+                <span> <font-awesome-icon class="mr-1" size="sm" icon="hryvnia" /> {{ property.price | money }} {{ property.isRent ? ' p/m' : '' }}</span>
                 <span> <font-awesome-icon class="mr-1" size="sm" icon="bicycle" /> {{ property.transportCostModifier }} </span>
               </div>
             </b-col>
@@ -49,12 +49,18 @@ export default class Property extends Vue {
   private visible: boolean[]
 
   mounted() {
+    this.relocated()
+    this.$store.events.$on('relocate', this.relocated)
+    this.visible = Array(this.$store.properties.length).fill(false)
+  }
+
+  relocated() {
     this.$store.properties = [
       {
         name: 'Apartment',
         description: 'Central location \n100 m²',
         isRent: true,
-        price: 1000,
+        price: this.$store.currentCountry['incityapRent'],
         transportCostModifier: 0.5,
         happiness: 0.1,
       },
@@ -62,7 +68,7 @@ export default class Property extends Vue {
         name: 'Penthouse',
         description: 'Central location\n250 m²',
         isRent: true,
-        price: 2100,
+        price: this.$store.currentCountry['incityapRent'] + 1100,
         transportCostModifier: 0.4,
         happiness: 0.2,
       },
@@ -70,7 +76,7 @@ export default class Property extends Vue {
         name: 'Apartment',
         description: 'Suburban neighbourhood\n130 m²',
         isRent: true,
-        price: 600,
+        price: this.$store.currentCountry['outcityapRent'],
         transportCostModifier: 1,
         happiness: 0.15,
       },
@@ -78,7 +84,7 @@ export default class Property extends Vue {
         name: 'Apartment',
         description: 'Quiet neighbourhood\n100 m²',
         isRent: false,
-        price: 120000,
+        price: 100000 + this.$store.currentCountry['outcityapBuy'],
         transportCostModifier: 1,
         happiness: 0.16,
       },
@@ -86,7 +92,7 @@ export default class Property extends Vue {
         name: 'House',
         description: 'Quiet location\n250 m²',
         isRent: false,
-        price: 200000,
+        price: 200000 + this.$store.currentCountry['incityapBuy'],
         transportCostModifier: 1,
         happiness: 0.1,
       },
@@ -94,12 +100,13 @@ export default class Property extends Vue {
         name: 'Mansion',
         description: 'Beautiful scenery\nFar from town\n500 m²',
         isRent: false,
-        price: 200000,
+        price: 200000 + this.$store.currentCountry['incityapBuy'],
         transportCostModifier: 1.4,
         happiness: 0.1,
       },
     ]
-    this.visible = Array(this.$store.properties.length).fill(false)
+    this.$store.rent = this.$store.properties[0].price
+    this.$forceUpdate()
   }
 
   toggleVisible(i: number) {
@@ -143,6 +150,15 @@ export default class Property extends Vue {
           title: prop.name + ' purchased!',
           text: 'Congratulations on purchasing this new property!',
         })
+
+        // Update expense cost of rent
+        if (prop.isRent) {
+          this.$store.rent = prop.price
+          const rentIndex = this.$store.expenses.findIndex((item) => item.name == 'Rent')
+          this.$store.expenses[rentIndex].price = prop.price
+        } else {
+          this.$store.rent = 0
+        }
 
         const transportIndex = this.$store.activities.findIndex((activity) => activity.name == 'Transport')
         this.$store.activities[transportIndex].hours = proposedTransport

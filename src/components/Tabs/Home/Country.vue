@@ -55,9 +55,9 @@
           :class="['text-right font-weight-bold', totalExpenses(selectedCountry) > totalExpenses() ? 'text-danger' : 'text-success']"
           v-if="selectedCountry != $store.country"
         >
-          {{ totalExpenses(selectedCountry) | money }}
+          {{ totalExpenses(selectedCountry) | money(true, true) }}
         </b-col>
-        <b-col class="text-right font-weight-bold text-danger">{{ totalExpenses() | money }}</b-col>
+        <b-col class="text-right font-weight-bold text-danger">{{ totalExpenses() | money(true, true) }}</b-col>
       </b-row>
     </div>
   </div>
@@ -90,13 +90,24 @@ export default class Country extends Vue {
         this.countryExpenses[country].push({ name: convert[type], price: info[country][type] })
       })
     })
+
+    for (const key in this.$store.currentCountry) {
+      this.$store.currentCountry[key] = info["Malta"][key]
+    }
   }
 
   relocate() {
-    // TODO: ADD RELOCATE LOGIC HERE
+    this.$store.money = this.$store.money - 3000
     console.log(`relocate from ${this.$store.country} to ${this.selectedCountry}`)
 
     this.$store.country = this.selectedCountry
+
+    for (const key in this.$store.currentCountry) {
+      this.$store.currentCountry[key] = info[this.$store.country][key]
+    }
+
+    console.log(this.$store.currentCountry)
+
     this.$store.events.$emit('relocate')
   }
 

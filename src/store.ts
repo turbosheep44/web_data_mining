@@ -3,6 +3,51 @@ import _Vue, { PluginObject } from 'vue'
 export class Store {
   tickCount: number = 0
 
+  //Country
+  currentCountry: Country = {
+    fastfood: 0,
+    inexpensiveRest: 0,
+    expensiveRest: 0,
+    water: 0,
+    soda: 0,
+    coffee: 0,
+    beer: 0,
+    milk: 0,
+    wine: 0,
+    bread: 0,
+    rice: 0,
+    eggs: 0,
+    cheese: 0,
+    chicken: 0,
+    beef: 0,
+    apples: 0,
+    banana: 0,
+    oranges: 0,
+    tomato: 0,
+    potato: 0,
+    onion: 0,
+    lettuce: 0,
+    onewaybus: 0,
+    monthlybus: 0,
+    gas: 0,
+    car1: 0,
+    car2: 0,
+    basic: 0,
+    mobiletariff: 0,
+    internet: 0,
+    monthlygym: 0,
+    tennis: 0,
+    cinema: 0,
+    jeans: 0,
+    dress: 0,
+    runshoes: 0,
+    leathershoes: 0,
+    incityapRent: 0,
+    outcityapRent: 0,
+    incityapBuy: 0,
+    outcityapBuy: 0,
+  }
+
   // Happiness
   happiness: number = 0.75
   constantHappinessDecay: number = -5
@@ -13,7 +58,7 @@ export class Store {
   money: number = 10000
   expenses: Expense[] = []
   income: number = 1000
-  rent: number = 300
+  rent: number = 852.81 // first property price for malta?
   totalExpenses = () => this.expenses.reduce((sum, expense) => sum + expense.price, 0)
 
   // Stocks
@@ -24,7 +69,7 @@ export class Store {
   job: Job = { title: 'Unemployed', wage: 0, hours: 0 }
   isEmployed = () => this.job.title !== 'Unemployed'
   jobOffers: Job[] = []
-  jobSearchDuration: number = 4
+  jobSearchDuration: number = 12
   jobSearchTargetTick: number = -1
   isJobSearching = () => this.jobSearchTargetTick != -1
 
@@ -54,6 +99,50 @@ export class Store {
   luxuries: Luxury[]
 
   events: _Vue = new _Vue()
+}
+
+interface Country {
+  fastfood: number
+  inexpensiveRest: number
+  expensiveRest: number
+  water: number
+  soda: number
+  coffee: number
+  beer: number
+  milk: number
+  wine: number
+  bread: number
+  rice: number
+  eggs: number
+  cheese: number
+  chicken: number
+  beef: number
+  apples: number
+  banana: number
+  oranges: number
+  tomato: number
+  potato: number
+  onion: number
+  lettuce: number
+  onewaybus: number
+  monthlybus: number
+  gas: number
+  car1: number
+  car2: number
+  basic: number
+  mobiletariff: number
+  internet: number
+  monthlygym: number
+  tennis: number
+  cinema: number
+  jeans: number
+  dress: number
+  runshoes: number
+  leathershoes: number
+  incityapRent: number
+  outcityapRent: number
+  incityapBuy: number
+  outcityapBuy: number
 }
 
 interface HappinessFactor {

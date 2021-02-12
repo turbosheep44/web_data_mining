@@ -46,8 +46,19 @@ export default class ActivityList extends Vue {
   private maxEnjoyment = [94, 185, 94]
   private minEnjoyment = [27, 37, 85]
 
+  refill(){
+    if (this.enjoyment < 0.1)
+      this.enjoyment += 0.2
+    else if (this.enjoyment < 0.5)
+      this.enjoyment += 0.4
+    else
+      this.enjoyment = 1
+
+  }
+
   mounted() {
     this.$store.events.$on('relocate', this.relocate)
+    this.$store.events.$on('tick-month', this.refill)
     this.progressBarColour()
 
     // set initial prices
@@ -55,7 +66,7 @@ export default class ActivityList extends Vue {
   }
 
   purchase(i: number) {
-    // TODO: perform activity logic
+    this.$store.money -= this.activities[i].cost
 
     const old = this.enjoyment
 
@@ -64,12 +75,12 @@ export default class ActivityList extends Vue {
     this.enjoyment = Math.pow(this.enjoyment, 2)
     if (this.enjoyment < 0.1) this.enjoyment = 0
 
+    // If I have time I will need to work on improving this
+    this.$store.happiness += this.enjoyment/20
     console.log(`${this.activities[i].name}     ${old.toFixed(2)} --> ${this.enjoyment.toFixed(2)}`)
   }
 
   relocate() {
-    // TODO: relocating changes the price of entertainment
-
     const country = CountryPrices[this.$store.country] // get new country
     this.activities.forEach((activity) => {
       if (!activity.relocationKey) return // cant update without a relocation key
