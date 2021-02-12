@@ -11,19 +11,19 @@
     <!-- Totals -->
     <div class="mt-4 d-flex justify-content-between align-items-center">
       <span>Expenses</span>
-      <span class="text-right font-weight-bold text-danger">€{{ totalExpenses().toFixed(2) }}</span>
+      <span class="text-right text-danger">€{{ totalExpenses().toFixed(2) }}</span>
     </div>
 
     <div class="d-flex justify-content-between align-items-center">
       <span>Income</span>
-      <span class="text-right font-weight-bold text-success">€{{ totalIncome().toFixed(2) }}</span>
+      <span class="text-right text-success">€{{ totalIncome().toFixed(2) }}</span>
     </div>
     <hr class="my-2" />
     <div class="d-flex justify-content-between align-items-center">
-      <span>Total</span>
-      <span :class="['text-right font-weight-bold', `text-${totalIncome() - totalExpenses() > 0 ? 'success' : 'danger'}`]">
+      <strong>Total</strong>
+      <strong :class="[`text-${totalIncome() - totalExpenses() >= 0 ? 'success' : 'danger'}`]">
         €{{ Math.abs(totalIncome() - totalExpenses()).toFixed(2) }}
-      </span>
+      </strong>
     </div>
   </div>
 </template>

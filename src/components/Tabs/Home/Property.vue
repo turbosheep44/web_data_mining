@@ -24,12 +24,12 @@
           </div>
           <b-row align-content="between" align-v="center">
             <b-col cols="4">
-              <b-btn v-if="$store.property != i" class="py-1" variant="success" @click="purchaseProperty(i)">Purchase</b-btn>
+              <b-btn v-if="$store.property != i" class="py-1" variant="success" @click="purchaseProperty(i)">{{ property.isRent ? 'Rent' : 'Purchase' }}</b-btn>
               <b-btn v-else class="py-1" disabled variant="outline-success">Owned</b-btn>
             </b-col>
             <b-col>
               <div class="d-flex justify-content-between align-items-start my-2">
-                <span> <font-awesome-icon class="mr-1" size="sm" icon="smile" />{{ property.happiness }} </span>
+                <span> <font-awesome-icon class="mr-1" size="sm" icon="smile" />{{ property.happiness * 100 }} </span>
                 <span> <font-awesome-icon class="mr-1" size="sm" icon="hryvnia" /> {{ property.price | money }} </span>
                 <span> <font-awesome-icon class="mr-1" size="sm" icon="bicycle" /> {{ property.transportCostModifier }} </span>
               </div>
@@ -48,7 +48,7 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class Property extends Vue {
   private visible: boolean[]
 
-  created() {
+  mounted() {
     this.$store.properties = [
       {
         name: 'Apartment',
@@ -56,7 +56,7 @@ export default class Property extends Vue {
         isRent: true,
         price: 1000,
         transportCostModifier: 0.5,
-        happiness: 10,
+        happiness: 0.1,
       },
       {
         name: 'Penthouse',
@@ -64,7 +64,7 @@ export default class Property extends Vue {
         isRent: true,
         price: 2100,
         transportCostModifier: 0.4,
-        happiness: 20,
+        happiness: 0.2,
       },
       {
         name: 'Apartment',
@@ -72,7 +72,7 @@ export default class Property extends Vue {
         isRent: true,
         price: 600,
         transportCostModifier: 1,
-        happiness: 15,
+        happiness: 0.15,
       },
       {
         name: 'Apartment',
@@ -80,7 +80,7 @@ export default class Property extends Vue {
         isRent: false,
         price: 120000,
         transportCostModifier: 1,
-        happiness: 16,
+        happiness: 0.16,
       },
       {
         name: 'House',
@@ -88,7 +88,7 @@ export default class Property extends Vue {
         isRent: false,
         price: 200000,
         transportCostModifier: 1,
-        happiness: 10,
+        happiness: 0.1,
       },
       {
         name: 'Mansion',
@@ -96,7 +96,7 @@ export default class Property extends Vue {
         isRent: false,
         price: 200000,
         transportCostModifier: 1.4,
-        happiness: 10,
+        happiness: 0.1,
       },
     ]
     this.visible = Array(this.$store.properties.length).fill(false)
@@ -127,7 +127,7 @@ export default class Property extends Vue {
       const currentTransport = this.$store.transports[this.$store.transport]
       const proposedTransport = Math.round(currentTransport.time * prop.transportCostModifier * 4) / 4
       const freeTime = 24 - this.$store.totalTime()
-      if (freeTime - currentTransport.time + proposedTransport  <= 0) {
+      if (freeTime - currentTransport.time + proposedTransport <= 0) {
         this.$notify({
           group: 'notification',
           title: prop.name + ' is too far away from work to fit into your schedule',
@@ -144,7 +144,7 @@ export default class Property extends Vue {
           text: 'Congratulations on purchasing this new property!',
         })
 
-        const transportIndex = this.$store.activities.findIndex((activity) => activity.name == "Transport")
+        const transportIndex = this.$store.activities.findIndex((activity) => activity.name == 'Transport')
         this.$store.activities[transportIndex].hours = proposedTransport
       }
     }

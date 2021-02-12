@@ -22,7 +22,7 @@ const TICK_YEAR = 12 * TICK_MONTH
 
 @Component({})
 export default class Time extends Vue {
-  created() {
+  mounted() {
     this.$store.events.$on('tick', this.onTick)
   }
 

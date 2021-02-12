@@ -40,30 +40,13 @@
         </b-row>
 
         <b-row align-v="center" class="my-3">
-          <b-col cols="4"><h4>Expenses</h4></b-col>
-          <b-col cols="6"> <b-form-textarea type="number" v-model="expenses" no-resize size="sm" rows="3"></b-form-textarea></b-col>
-          <b-col cols="2"> <b-button @click="updateExpenses">Update</b-button> </b-col>
-        </b-row>
-
-        <b-row align-v="center" class="my-3">
-          <b-col cols="4"><h4>Income</h4></b-col>
-          <b-col cols="6"> <b-form-input type="number" v-model="$store.income" number></b-form-input></b-col>
-        </b-row>
-
-        <b-row align-v="center" class="my-3">
           <b-col cols="4"><h4>Job</h4></b-col>
           <b-col cols="4"><b-btn block @click="createJobOffers">Create Job Offers</b-btn></b-col>
         </b-row>
 
         <b-row align-v="center" class="my-3">
-          <b-col cols="4"><h4>Activities</h4></b-col>
-          <b-col cols="6"> <b-form-textarea type="number" v-model="activities" no-resize size="sm" rows="3"></b-form-textarea></b-col>
-          <b-col cols="2"> <b-button @click="updateActivities">Update</b-button> </b-col>
-        </b-row>
-
-        <b-row align-v="center" class="my-3">
           <b-col cols="4"><h4>Events</h4></b-col>
-          <b-col cols="4"> <b-button @click="simulateEvent">Fire Event</b-button> </b-col>
+          <b-col cols="4"> <b-button block @click="simulateEvent">Fire Event</b-button> </b-col>
         </b-row>
       </b-container>
     </transition>
@@ -78,35 +61,14 @@ import { Event } from '@/store'
 @Component({})
 export default class DevTools extends Vue {
   private ticks: number = 0
-  private expenses: string = '' //'School:25 Electricity:130 Water:80 Taxes:350 Mortgage:250 Basics:80'
-  private activities: string = 'Sleep:8 Luxuries:3'
   private visible: boolean = false
 
   mounted() {
     this.$on('tick', () => console.log('tick'))
-    this.updateExpenses()
-    this.updateActivities()
   }
 
   simulateTicks() {
     for (let i = 0; i < this.ticks; i++) this.$store.events.$emit('tick')
-  }
-
-  updateExpenses() {
-    this.$store.expenses = []
-    if(this.expenses.trim().length != 0)
-      for (const expense of this.expenses.split(' ')) {
-        const [name, price] = expense.split(':')
-        this.$store.expenses.push({ name, price: parseFloat(price) })
-      }
-    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
-  }
-  updateActivities() {
-    // this.$store.activities = []
-    for (const activity of this.activities.split(' ')) {
-      const [name, price] = activity.split(':')
-      this.$store.activities.push({ name, hours: parseFloat(price) })
-    }
   }
 
   simulateEvent() {

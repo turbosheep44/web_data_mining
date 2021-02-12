@@ -3,7 +3,7 @@
     <template #first><ActivityList title="Entertainment" :activities="entertainment" /></template>
     <template #second><ActivityList title="Food" :activities="food" /></template>
     <template #third><ActivityList title="Sport" :activities="sport" /></template>
-    <template #fourth>Happiness</template>
+    <template #fourth><Happiness /></template>
   </ColumnView>
 </template>
 
@@ -11,10 +11,11 @@
 import { Component, Vue } from 'vue-property-decorator'
 import ColumnView from '@/components/Tabs/ColumnView.vue'
 import ActivityList from '@/components/Tabs/Leisure/ActivityList.vue'
+import Happiness from '@/components/Tabs/Leisure/Happiness.vue'
 import { Activity } from '@/components/Tabs/Leisure/activity'
 
 @Component({
-  components: { ColumnView, ActivityList },
+  components: { ColumnView, ActivityList, Happiness },
 })
 export default class Leisure extends Vue {
   private entertainment: Activity[] = [

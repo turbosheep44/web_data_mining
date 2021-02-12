@@ -5,14 +5,16 @@ export class Store {
 
   // Happiness
   happiness: number = 0.75
-  constantHappinessDecay:number = 5
+  constantHappinessDecay: number = -5
   happinessFactors: HappinessFactor[] = []
+  propertyHappinessCap: number
 
   // Money
   money: number = 10000
   expenses: Expense[] = []
   income: number = 1000
   rent: number = 300
+  totalExpenses = () => this.expenses.reduce((sum, expense) => sum + expense.price, 0)
 
   // Stocks
   stocks: Stock[] = []
@@ -41,22 +43,23 @@ export class Store {
   }
 
   // Transport
-  currentTransportTime:number = 0
+  currentTransportTime: number = 0
   transport: number = -1
   transports: Transport[]
 
   // Luxuries
   luxuryTime: number = 3
   standardLuxuryTime: number = 3
-  currentLuxuryHappiness:number = 0
+  currentLuxuryHappiness: number = 0
   luxuries: Luxury[]
 
   events: _Vue = new _Vue()
 }
 
 interface HappinessFactor {
-  name:string
-  factor:number
+  name: string
+  factor: number
+  description: string
 }
 
 interface Luxury {
@@ -64,9 +67,9 @@ interface Luxury {
   description: string
   tier: number
   basePrice: number
-  baseHappiness: number 
-  currentHappiness :number
-  multiplier : number
+  baseHappiness: number
+  currentHappiness: number
+  multiplier: number
 }
 
 interface Expense {

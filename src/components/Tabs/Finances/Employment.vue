@@ -43,7 +43,7 @@ export default class Employment extends Vue {
 
   private visible: boolean = true
 
-  created() {
+  mounted() {
     if (this.collapse) this.visible = false
   }
 

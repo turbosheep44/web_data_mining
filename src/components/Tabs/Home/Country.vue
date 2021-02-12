@@ -83,14 +83,12 @@ export default class Country extends Vue {
   created() {
     this.countries = Object.keys(info).sort()
     this.expenseTypes = Object.keys(convert)
+
     this.countries.forEach((country) => {
       this.countryExpenses[country] = []
       this.expenseTypes.forEach((type) => {
         this.countryExpenses[country].push({ name: convert[type], price: info[country][type] })
       })
-      // parseFloat(country['Utilities (Monthly)'][0][1]),
-      // parseFloat(country['Utilities (Monthly)'][2][1]),
-      // parseFloat(country['Clothing And Shoes'][0][1]) + parseFloat(country['Clothing And Shoes'][1][1]),
     })
   }
 
