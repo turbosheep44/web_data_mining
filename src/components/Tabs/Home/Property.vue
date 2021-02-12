@@ -46,66 +46,33 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class Property extends Vue {
-  private visible: boolean[]
+  private visible: boolean[] = []
 
   mounted() {
-    this.relocated()
-    this.$store.events.$on('relocate', this.relocated)
     this.visible = Array(this.$store.properties.length).fill(false)
+
+    this.$store.events.$on('relocate', this.relocated)
+
+    this.setPrices()
+    this.$store.expenses.push({ name: 'Rent', price: this.$store.properties[0].price })
+  }
+
+  setPrices() {
+    const relocation = ['incityapRent', 'incityapRent', 'outcityapRent', 'outcityapBuy', 'incityapBuy', 'incityapBuy']
+    this.$store.properties.forEach((property, i) => {
+      property.price = this.$store.currentCountry[relocation[i]]
+    })
   }
 
   relocated() {
-    this.$store.properties = [
-      {
-        name: 'Apartment',
-        description: 'Central location \n100 m²',
-        isRent: true,
-        price: this.$store.currentCountry['incityapRent'],
-        transportCostModifier: 0.5,
-        happiness: 0.1,
-      },
-      {
-        name: 'Penthouse',
-        description: 'Central location\n250 m²',
-        isRent: true,
-        price: this.$store.currentCountry['incityapRent'] + 1100,
-        transportCostModifier: 0.4,
-        happiness: 0.2,
-      },
-      {
-        name: 'Apartment',
-        description: 'Suburban neighbourhood\n130 m²',
-        isRent: true,
-        price: this.$store.currentCountry['outcityapRent'],
-        transportCostModifier: 1,
-        happiness: 0.15,
-      },
-      {
-        name: 'Apartment',
-        description: 'Quiet neighbourhood\n100 m²',
-        isRent: false,
-        price: 100000 + this.$store.currentCountry['outcityapBuy'],
-        transportCostModifier: 1,
-        happiness: 0.16,
-      },
-      {
-        name: 'House',
-        description: 'Quiet location\n250 m²',
-        isRent: false,
-        price: 200000 + this.$store.currentCountry['incityapBuy'],
-        transportCostModifier: 1,
-        happiness: 0.1,
-      },
-      {
-        name: 'Mansion',
-        description: 'Beautiful scenery\nFar from town\n500 m²',
-        isRent: false,
-        price: 200000 + this.$store.currentCountry['incityapBuy'],
-        transportCostModifier: 1.4,
-        happiness: 0.1,
-      },
-    ]
-    this.$store.rent = this.$store.properties[0].price
+    // sell your property for 80% of their price if not renting
+    const currentProperty = this.$store.properties[this.$store.property]
+    if (!currentProperty.isRent) this.$store.money += 0.8 * currentProperty.price
+
+    // go back to renting the basic apartment
+    this.setPrices()
+    this.purchaseProperty(0)
+
     this.$forceUpdate()
   }
 
@@ -151,13 +118,13 @@ export default class Property extends Vue {
           text: 'Congratulations on purchasing this new property!',
         })
 
-        // Update expense cost of rent
+        // update or remove cost of rent
+        const rentIndex = this.$store.expenses.findIndex((expense) => expense.name == 'Rent')
         if (prop.isRent) {
-          this.$store.rent = prop.price
-          const rentIndex = this.$store.expenses.findIndex((item) => item.name == 'Rent')
-          this.$store.expenses[rentIndex].price = prop.price
-        } else {
-          this.$store.rent = 0
+          if (rentIndex != -1) this.$store.expenses[rentIndex].price = prop.price
+          else this.$store.expenses.push({ name: 'Rent', price: prop.price })
+        } else if (rentIndex != -1) {
+          this.$store.expenses.splice(rentIndex, 1)
         }
 
         const transportIndex = this.$store.activities.findIndex((activity) => activity.name == 'Transport')

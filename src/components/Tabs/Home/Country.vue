@@ -28,15 +28,15 @@
       <!-- header -->
       <transition name="fade">
         <b-row v-if="selectedCountry != $store.country" class="country-expenses-header">
-          <b-col></b-col>
+          <b-col cols="5"></b-col>
           <b-col class="text-right font-weight-bold"><country-flag :country="myFlags[selectedCountry]" size="small" /> {{ selectedCountry }}</b-col>
           <b-col class="text-right font-weight-bold"><country-flag :country="myFlags[$store.country]" size="small" /> {{ $store.country }}</b-col>
         </b-row>
       </transition>
 
       <!-- breakdown -->
-      <b-row v-for="{ name, price, comparePrice } in allExpenses().slice(0, 10)" :key="name" align-v="center" align-content="between">
-        <b-col>{{ name }}</b-col>
+      <b-row v-for="{ name, price, comparePrice } in allExpenses()" :key="name" align-v="center" align-content="between">
+        <b-col cols="5">{{ name }}</b-col>
         <transition name="fade">
           <b-col :class="['text-right country-expense', comparePrice > price ? 'text-danger' : 'text-success']" v-if="selectedCountry != $store.country">
             {{ comparePrice | money(true, true) }}
@@ -50,7 +50,7 @@
       <!-- total -->
       <hr class="my-2" />
       <b-row class="d-flex justify-content-between align-items-center">
-        <b-col>Total</b-col>
+        <b-col cols="5"></b-col>
         <b-col
           :class="['text-right font-weight-bold', totalExpenses(selectedCountry) > totalExpenses() ? 'text-danger' : 'text-success']"
           v-if="selectedCountry != $store.country"
@@ -82,7 +82,7 @@ export default class Country extends Vue {
 
   created() {
     this.countries = Object.keys(info).sort()
-    this.expenseTypes = Object.keys(convert)
+    this.expenseTypes = ['incityapRent', 'basic', 'bread', 'gas', 'inexpensiveRest', 'leathershoes']
 
     this.countries.forEach((country) => {
       this.countryExpenses[country] = []
@@ -90,23 +90,14 @@ export default class Country extends Vue {
         this.countryExpenses[country].push({ name: convert[type], price: info[country][type] })
       })
     })
-
-    for (const key in this.$store.currentCountry) {
-      this.$store.currentCountry[key] = info["Malta"][key]
-    }
   }
 
   relocate() {
-    this.$store.money = this.$store.money - 3000
     console.log(`relocate from ${this.$store.country} to ${this.selectedCountry}`)
+    this.$store.money = this.$store.money - 3000
 
     this.$store.country = this.selectedCountry
-
-    for (const key in this.$store.currentCountry) {
-      this.$store.currentCountry[key] = info[this.$store.country][key]
-    }
-
-    console.log(this.$store.currentCountry)
+    this.$store.currentCountry = info[this.$store.country]
 
     this.$store.events.$emit('relocate')
   }

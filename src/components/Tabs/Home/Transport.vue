@@ -54,47 +54,11 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class Transport extends Vue {
-  private visible: boolean[]
+  private visible: boolean[] = []
 
   mounted() {
-    this.$store.transports = [
-      {
-        name: 'Walk',
-        description: 'Healthy, free way to get to work but takes a lot of time.',
-        purchased: true,
-        price: 0,
-        upkeep: 0,
-        time: 1.5,
-      },
-      {
-        name: 'Bicycle',
-        description: 'Healthy, fast way to get to work for a small upfront cost.',
-        purchased: false,
-        price: 100,
-        upkeep: 0,
-        time: 1,
-      },
-      {
-        name: 'Bus',
-        description: 'Faster than using a bike but without the upfront cost of a car.',
-        purchased: true,
-        price: 0,
-        upkeep: 10,
-        time: 0.75,
-      },
-      {
-        name: 'Car',
-        description: 'Fastest way to get to work but with significant upkeep costs.',
-        purchased: false,
-        price: 100000,
-        upkeep: 100,
-        time: 0.5,
-      },
-    ]
-
     // Setting the default transport
-    this.$store.transport = 0
-    this.visible = Array(this.$store.properties.length).fill(false)
+    this.visible = Array(this.$store.transports.length).fill(false)
     this.visible[this.$store.transport] = true
 
     // adding it as an activity
@@ -102,7 +66,15 @@ export default class Transport extends Vue {
       Math.round(this.$store.properties[this.$store.property].transportCostModifier * this.$store.transports[this.$store.transport].time * 4) / 4
     this.$store.activities.push({ name: 'Transport', hours: roundedTime })
 
-    this.$forceUpdate()
+    this.$store.events.$on('relocate', this.setPrices)
+    this.setPrices()
+  }
+
+  setPrices() {
+    this.$store.transports[2].upkeep = this.$store.currentCountry.monthlybus
+
+    this.$store.transports[3].price = this.$store.currentCountry.car1
+    this.$store.transports[3].upkeep = this.$store.currentCountry.gas * 30
   }
 
   toggleVisible(i) {
@@ -150,12 +122,12 @@ export default class Transport extends Vue {
       // activity since the walking would have been set by default.
 
       // Make the transport an expense
-      const transportIndex = this.$store.expenses.findIndex((item) => item.name=="Transport")
-      if(transportIndex == -1){
-        this.$store.expenses.push({name:"Transport", price:toUse.upkeep})
-      }else{
+      const transportIndex = this.$store.expenses.findIndex((item) => item.name == 'Transport')
+      if (transportIndex == -1) {
+        this.$store.expenses.push({ name: 'Transport', price: toUse.upkeep })
+      } else {
         this.$store.expenses[transportIndex].price = toUse.upkeep
-        console.log("Price ", toUse.upkeep)
+        console.log('Price ', toUse.upkeep)
       }
 
       const transport = this.$store.activities.find((act) => {

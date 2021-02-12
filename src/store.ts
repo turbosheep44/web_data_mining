@@ -1,53 +1,13 @@
 import _Vue, { PluginObject } from 'vue'
+import { LUXURIES, PROPERTIES, TRANSPORTS } from './defaults'
+import countryPrices from '@/assets/countries.json'
 
 export class Store {
   tickCount: number = 0
 
   // Country
   country: string = 'Malta'
-  currentCountry: Country = {
-    fastfood: 0,
-    inexpensiveRest: 0,
-    expensiveRest: 0,
-    water: 0,
-    soda: 0,
-    coffee: 0,
-    beer: 0,
-    milk: 0,
-    wine: 0,
-    bread: 0,
-    rice: 0,
-    eggs: 0,
-    cheese: 0,
-    chicken: 0,
-    beef: 0,
-    apples: 0,
-    banana: 0,
-    oranges: 0,
-    tomato: 0,
-    potato: 0,
-    onion: 0,
-    lettuce: 0,
-    onewaybus: 0,
-    monthlybus: 0,
-    gas: 0,
-    car1: 0,
-    car2: 0,
-    basic: 0,
-    mobiletariff: 0,
-    internet: 0,
-    monthlygym: 0,
-    tennis: 0,
-    cinema: 0,
-    jeans: 0,
-    dress: 0,
-    runshoes: 0,
-    leathershoes: 0,
-    incityapRent: 0,
-    outcityapRent: 0,
-    incityapBuy: 0,
-    outcityapBuy: 0,
-  }
+  currentCountry: Country = countryPrices['Malta']
 
   // Happiness
   happiness: number = 0.75
@@ -59,7 +19,6 @@ export class Store {
   money: number = 10000
   expenses: Expense[] = []
   income: number = 1000
-  rent: number = 852.81 // first property price for malta?
   totalExpenses = () => this.expenses.reduce((sum, expense) => sum + expense.price, 0)
 
   // Stocks
@@ -76,7 +35,7 @@ export class Store {
 
   // Property
   property: number = 0
-  properties: Property[] = []
+  properties: Property[] = PROPERTIES
 
   // Time
   activities: Activity[] = []
@@ -87,14 +46,14 @@ export class Store {
 
   // Transport
   currentTransportTime: number = 0
-  transport: number = -1
-  transports: Transport[]
+  transport: number = 0
+  transports: Transport[] = TRANSPORTS
 
   // Luxuries
   luxuryTime: number = 3
   standardLuxuryTime: number = 3
   currentLuxuryHappiness: number = 0
-  luxuries: Luxury[]
+  luxuries: Luxury[] = LUXURIES
 
   events: _Vue = new _Vue()
 }
@@ -201,14 +160,21 @@ interface Transport {
   time: number
 }
 
+////////////////////////////////////////////////////////////////////////
+////////////////////////      EVENT     ////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
 export class Event {
   text: string = 'Event'
 
-  effects: { happiness?: number; money?: number } = {}
+  effects: EventEffects = {}
+  callback?: (Store) => void
+  checkPrerequisites?: (Store) => boolean
 
-  actions: { text: string; callback: () => void }[] = [
+  actions: { text: string; callback?: ($store: Store) => void; tooltip: string }[] = [
     {
       text: 'OK',
+      tooltip: '',
       callback: () => {
         null
       },
@@ -220,6 +186,15 @@ export class Event {
     Object.assign(this, data)
   }
 }
+
+export interface EventEffects {
+  happiness?: number
+  money?: number
+}
+
+////////////////////////////////////////////////////////////////////////
+///////////////////////      PLUGIN     ////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 
 export class StorePlugin implements PluginObject<void> {
   install(Vue: typeof _Vue): void {

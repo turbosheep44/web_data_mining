@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay d-flex justify-content-center align-items-center" @click="dismiss">
+  <div class="overlay d-flex justify-content-center align-items-center" @click="barrierDismiss">
     <b-card class="overlay-content">
       <b-card-text>{{ this.event.text }}</b-card-text>
 
@@ -13,8 +13,19 @@
       <hr />
 
       <div class="d-flex justify-content-end">
-        <b-button v-for="(action, i) in this.event.actions" :key="i" variant="outline-info" class="ml-2" @click="callbackAndDismiss(i)">
+        <b-button
+          v-for="(action, i) in this.event.actions"
+          :key="i"
+          :id="`event-action-${i}`"
+          variant="outline-info"
+          class="ml-2"
+          @click="callbackAndDismiss(i)"
+        >
           {{ action.text }}
+
+          <b-tooltip v-if="action.tooltip != ''" :target="`event-action-${i}`" triggers="hover" placement="bottom">
+            {{ action.tooltip }}
+          </b-tooltip>
         </b-button>
       </div>
     </b-card>
@@ -32,16 +43,29 @@ export default class EventOverlay extends Vue {
   @Prop({ required: true }) event: Event
 
   dismiss() {
-    if (this.event.isBarrierDismissable) this.$emit('dismiss')
+    this.applyEffects()
+    if (this.event.callback) this.event.callback(this.$store)
+    this.$emit('dismiss')
+  }
+
+  barrierDismiss() {
+    if (!this.event.isBarrierDismissable) return
+    this.dismiss()
   }
 
   callbackAndDismiss(i: number) {
-    this.event.actions[i].callback()
-    this.$emit('dismiss')
+    ;(this.event.actions[i].callback || (() => true))(this.$store)
+    this.dismiss()
   }
 
   effectIcon(effect: string) {
     return EFFECTS[effect]
+  }
+
+  applyEffects() {
+    const effects = this.event.effects
+    if (effects.happiness) this.$store.happiness += effects.happiness / 100
+    if (effects.money) this.$store.money += effects.money
   }
 }
 </script>

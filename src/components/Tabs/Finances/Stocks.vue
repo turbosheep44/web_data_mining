@@ -110,11 +110,11 @@ export default class Stocks extends Vue {
       this.$store.stocks[stockId].invested *= ratio
       this.$store.money += oldValue - newValue
 
-      this.$notify({
-        group: 'notification',
-        title: 'Sold Stock ' + stockId,
-        text: ':)',
-      })
+      // this.$notify({
+      //   group: 'notification',
+      //   title: 'Sold Stock ' + stockId,
+      //   text: ':)',
+      // })
     }
   }
 

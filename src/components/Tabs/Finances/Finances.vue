@@ -20,7 +20,6 @@ import Work from '@/components/Tabs/Finances/Work.vue'
 export default class Finances extends Vue {
   relocated() {
     this.$store.expenses = []
-    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
     this.$store.expenses.push({ name: 'Food', price: 30 * this.$store.currentCountry['water'] + 30 * this.$store.currentCountry['bread'] })
     this.$store.expenses.push({ name: 'Basic Utilities', price: this.$store.currentCountry['basic'] })
   }
@@ -31,7 +30,6 @@ export default class Finances extends Vue {
     this.$store.events.$on('tick-month', this.calculateExpensesAndRevenues)
 
     // Just for start
-    this.$store.expenses.push({ name: 'Rent', price: this.$store.rent })
     this.$store.expenses.push({ name: 'Food', price: 30 * this.$store.currentCountry['water'] + 30 * this.$store.currentCountry['bread'] })
     this.$store.expenses.push({ name: 'Basic Utilities', price: this.$store.currentCountry['basic'] })
   }

@@ -56,7 +56,7 @@
 
 <script lang = "ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { Event } from '@/store'
+import { randomEvent } from '@/components/events'
 
 @Component({})
 export default class DevTools extends Vue {
@@ -72,26 +72,7 @@ export default class DevTools extends Vue {
   }
 
   simulateEvent() {
-    this.$store.events.$emit(
-      'event',
-      new Event({
-        text: 'You have crashed your car and will need to pay your insurance excess of €250 or use a different mode of transport.',
-        actions: [
-          { text: 'Pay Excess', callback: () => console.log('pay excess') },
-          { text: 'Use Bus', callback: () => console.log('use bus') },
-        ],
-        effects: { happiness: -5, money: 150 },
-        isBarrierDismissable: false,
-      })
-    )
-    this.$store.events.$emit(
-      'event',
-      new Event({
-        text: 'The compnay you were working for has declared bankrupcy so you have lost your job!',
-        effects: { happiness: -10 },
-        isBarrierDismissable: true,
-      })
-    )
+    randomEvent(this.$store, 0)
   }
 
   createJobOffers() {

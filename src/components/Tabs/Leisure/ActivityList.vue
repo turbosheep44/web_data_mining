@@ -32,7 +32,6 @@
 import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator'
 import ActivityCard from '@/components/Tabs/Leisure/Activity.vue'
 import { Activity } from '@/components/Tabs/Leisure/activity'
-import CountryPrices from '@/assets/countries.json'
 
 @Component({ components: { ActivityCard } })
 export default class ActivityList extends Vue {
@@ -46,23 +45,16 @@ export default class ActivityList extends Vue {
   private maxEnjoyment = [94, 185, 94]
   private minEnjoyment = [27, 37, 85]
 
-  refill(){
-    if (this.enjoyment < 0.1)
-      this.enjoyment += 0.2
-    else if (this.enjoyment < 0.5)
-      this.enjoyment += 0.4
-    else
-      this.enjoyment = 1
-
+  refill() {
+    if (this.enjoyment < 0.1) this.enjoyment += 0.2
+    else if (this.enjoyment < 0.5) this.enjoyment += 0.4
+    else this.enjoyment = 1
   }
 
   mounted() {
     this.$store.events.$on('relocate', this.relocate)
     this.$store.events.$on('tick-month', this.refill)
     this.progressBarColour()
-
-    // set initial prices
-    this.relocate()
   }
 
   purchase(i: number) {
@@ -76,15 +68,14 @@ export default class ActivityList extends Vue {
     if (this.enjoyment < 0.1) this.enjoyment = 0
 
     // If I have time I will need to work on improving this
-    this.$store.happiness += this.enjoyment/20
+    this.$store.happiness += this.enjoyment / 20
     console.log(`${this.activities[i].name}     ${old.toFixed(2)} --> ${this.enjoyment.toFixed(2)}`)
   }
 
   relocate() {
-    const country = CountryPrices[this.$store.country] // get new country
     this.activities.forEach((activity) => {
       if (!activity.relocationKey) return // cant update without a relocation key
-      activity.cost = country[activity.relocationKey] * (activity.priceMultiplier || 1) // update price
+      activity.cost = this.$store.currentCountry[activity.relocationKey] * (activity.priceMultiplier || 1) // update price
     })
   }
 

@@ -19,21 +19,36 @@
     <!-- Luxury cards -->
     <b-card v-for="(luxury, i) in $store.luxuries" :key="luxury.name" class="my-2">
       <!-- description -->
-      <font-awesome-icon :icon="icon(luxury.name)" class="mr-2" />
-      <b>{{ luxury.name }}</b>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-start align-items-center">
+          <font-awesome-icon :icon="icon(luxury.name)" class="mr-2" />
+          <b>{{ luxury.name }}</b>
+        </div>
+        <div class="ml-3" v-b-tooltip.hover.bottomright title="This is the amount of happiness you are currently receiving from this luxury.">
+          <font-awesome-icon icon="smile" class="mr-1" />
+          {{ getCurrentHappiness(i) }}
+        </div>
+      </div>
       <br />
       {{ luxury.description }}
 
       <!-- stats and purchase buttons -->
       <div class="d-flex justify-content-end align-items-center my-2">
-        <div class="ml-3">
-          <font-awesome-icon icon="smile" class="mr-1" />
-          {{ getCurrentHappiness(i) }}, {{ luxury.baseHappiness - luxury.tier - 1 }}
+        <div
+          class="ml-3 d-flex align-items-center my-2"
+          v-b-tooltip.hover.bottomright
+          title="This is the additional happiness you will receive from this luxury once you upgrade it."
+        >
+          <font-awesome-icon icon="plus" class="mr-1" size="xs" />
+          <font-awesome-icon icon="smile" class="mr-1" size="sm" />
+          <div>{{ luxury.baseHappiness - luxury.tier - 1 }}</div>
         </div>
+
         <div class="ml-3">
           <font-awesome-icon icon="hryvnia" class="mr-1" />
-          {{ getUpgradePrice(i) == -1 ? '---' : getUpgradePrice(i) }}
+          {{ luxury.tier != 4 ? getUpgradePrice(i) : '-' | money }}
         </div>
+
         <b-btn v-if="luxury.tier < 4" variant="success" class="ml-3 py-1" @click="upgradeLuxury(i)">{{ luxury.tier == 0 ? 'Purchase' : 'Upgrade' }}</b-btn>
         <b-btn v-else variant="outline-dark" disabled class="ml-3 py-1">Max Tier</b-btn>
       </div>
@@ -59,61 +74,23 @@ const LUXURY_ICONS = {
 
 @Component({})
 export default class Luxuries extends Vue {
-  created() {
-    this.relocated()
+  mounted() {
     this.$store.events.$on('relocate', this.relocated)
 
     this.$store.activities.push({ name: 'Luxuries', hours: this.$store.luxuryTime })
+    this.setPrices()
+  }
+
+  setPrices() {
+    const base = this.$store.currentCountry['basic']
+    const multipliers = [1.5, 100.0, 10.0, 1.0, 0.2]
+    this.$store.luxuries.forEach((luxury, i) => {
+      luxury.basePrice = multipliers[i] * base
+    })
   }
 
   relocated() {
-    this.$store.luxuries = [
-      {
-        name: 'Television',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        tier: 0,
-        basePrice: (150 * this.$store.currentCountry['basic']) / 100,
-        baseHappiness: 5,
-        currentHappiness: 0,
-        multiplier: 4,
-      },
-      {
-        name: 'Pool',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        tier: 0,
-        basePrice: (10000 * this.$store.currentCountry['basic']) / 100,
-        baseHappiness: 5,
-        currentHappiness: 0,
-        multiplier: 3,
-      },
-      {
-        name: 'Computer',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        tier: 0,
-        basePrice: (1000 * this.$store.currentCountry['basic']) / 100,
-        baseHappiness: 5,
-        currentHappiness: 0,
-        multiplier: 2,
-      },
-      {
-        name: 'Air Conditioning',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        tier: 0,
-        basePrice: (100 * this.$store.currentCountry['basic']) / 100,
-        baseHappiness: 5,
-        currentHappiness: 0,
-        multiplier: 8,
-      },
-      {
-        name: 'Coffee Machine',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        tier: 0,
-        basePrice: (20 * this.$store.currentCountry['basic']) / 100,
-        baseHappiness: 5,
-        currentHappiness: 0,
-        multiplier: 4,
-      },
-    ]
+    this.setPrices()
     this.$forceUpdate()
   }
 
@@ -182,12 +159,8 @@ export default class Luxuries extends Vue {
     this.$forceUpdate()
   }
 
-  getUpgradePrice(i: number): number {
+  getUpgradePrice(i: number) {
     const luxury = this.$store.luxuries[i]
-    if (luxury.tier == 4) {
-      return -1
-    }
-
     const mult = Math.pow(luxury.multiplier, luxury.tier + 1)
     return luxury.basePrice * mult
   }
