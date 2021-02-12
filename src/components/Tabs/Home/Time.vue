@@ -63,6 +63,11 @@ export default class Time extends Vue {
     },
   }
 
+  mounted() {
+    // create a value in activities for sleep
+    this.$store.activities.push({ name: 'Sleep', hours: this.$store.sleep })
+  }
+
   activityData() {
     return {
       labels: this.activitiesWithFree().map((activity) => activity.name),

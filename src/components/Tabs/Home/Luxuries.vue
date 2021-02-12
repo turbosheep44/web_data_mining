@@ -59,15 +59,20 @@ const LUXURY_ICONS = {
 
 @Component({})
 export default class Luxuries extends Vue {
+  created() {
+    this.relocated()
+    this.$store.events.$on('relocate', this.relocated)
 
-  relocated(){
-    
+    this.$store.activities.push({ name: 'Luxuries', hours: this.$store.luxuryTime })
+  }
+
+  relocated() {
     this.$store.luxuries = [
       {
         name: 'Television',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         tier: 0,
-        basePrice: 150*this.$store.currentCountry["basic"]/100,
+        basePrice: (150 * this.$store.currentCountry['basic']) / 100,
         baseHappiness: 5,
         currentHappiness: 0,
         multiplier: 4,
@@ -76,7 +81,7 @@ export default class Luxuries extends Vue {
         name: 'Pool',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         tier: 0,
-        basePrice: 10000*this.$store.currentCountry["basic"]/100,
+        basePrice: (10000 * this.$store.currentCountry['basic']) / 100,
         baseHappiness: 5,
         currentHappiness: 0,
         multiplier: 3,
@@ -85,7 +90,7 @@ export default class Luxuries extends Vue {
         name: 'Computer',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         tier: 0,
-        basePrice: 1000*this.$store.currentCountry["basic"]/100,
+        basePrice: (1000 * this.$store.currentCountry['basic']) / 100,
         baseHappiness: 5,
         currentHappiness: 0,
         multiplier: 2,
@@ -94,7 +99,7 @@ export default class Luxuries extends Vue {
         name: 'Air Conditioning',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         tier: 0,
-        basePrice: 100*this.$store.currentCountry["basic"]/100,
+        basePrice: (100 * this.$store.currentCountry['basic']) / 100,
         baseHappiness: 5,
         currentHappiness: 0,
         multiplier: 8,
@@ -103,18 +108,13 @@ export default class Luxuries extends Vue {
         name: 'Coffee Machine',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         tier: 0,
-        basePrice: 20*this.$store.currentCountry["basic"]/100,
+        basePrice: (20 * this.$store.currentCountry['basic']) / 100,
         baseHappiness: 5,
         currentHappiness: 0,
         multiplier: 4,
       },
     ]
     this.$forceUpdate()
-  }
-
-  created() {
-    this.relocated()
-    this.$store.events.$on("relocate", this.relocated)
   }
 
   icon(luxury: string) {

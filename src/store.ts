@@ -3,7 +3,8 @@ import _Vue, { PluginObject } from 'vue'
 export class Store {
   tickCount: number = 0
 
-  //Country
+  // Country
+  country: string = 'Malta'
   currentCountry: Country = {
     fastfood: 0,
     inexpensiveRest: 0,
@@ -72,9 +73,6 @@ export class Store {
   jobSearchDuration: number = 12
   jobSearchTargetTick: number = -1
   isJobSearching = () => this.jobSearchTargetTick != -1
-
-  // Country
-  country: string = 'Malta'
 
   // Property
   property: number = 0

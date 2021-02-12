@@ -21,6 +21,7 @@ import DevTools from '@/components/DevTools.vue'
 import EventOverlay from '@/components/EventOverlay.vue'
 
 import { Event } from '@/store'
+import { randomEvent } from '@/components/events'
 
 @Component({
   components: { Tabs, Status, DevTools, EventOverlay },
@@ -40,6 +41,7 @@ export default class Game extends Vue {
       if (!this.event) this.event = e
       else this.eventBacklog.push(e)
     })
+    this.$store.events.$on('tick-month', () => randomEvent(this.$store))
   }
 
   nextEvent() {
