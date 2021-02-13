@@ -58,17 +58,27 @@ export default class ActivityList extends Vue {
   }
 
   purchase(i: number) {
-    this.$store.money -= this.activities[i].cost
+    const freetime = 24 - this.$store.totalTime()
 
+    if (this.activities[i].time > freetime) {
+      this.$notify({
+        group: 'notification',
+        title: this.activities[i].name + ' requires more free time!',
+        text: 'Allocate more free time and you will be able to purchase this lesiure activity!',
+      })
+      return
+    }
+
+    this.$store.money -= this.activities[i].cost
     const old = this.enjoyment
+
+    this.$store.happiness += (this.activities[i].happiness / 100) * this.enjoyment
 
     // decay enjoyment value
     if (this.enjoyment == 1) this.enjoyment = 0.95
     this.enjoyment = Math.pow(this.enjoyment, 2)
     if (this.enjoyment < 0.1) this.enjoyment = 0
 
-    // If I have time I will need to work on improving this
-    this.$store.happiness += this.enjoyment / 20
     console.log(`${this.activities[i].name}     ${old.toFixed(2)} --> ${this.enjoyment.toFixed(2)}`)
   }
 
