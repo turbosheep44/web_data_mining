@@ -9,15 +9,7 @@
     <!-- Job Offers -->
     <h6 class="my-3">Job Offers</h6>
 
-    <Employment
-      v-for="(job, i) of $store.jobOffers"
-      :key="i"
-      v-bind="job"
-      collapse="true"
-      class="my-3"
-      button-text="Accept Job"
-      @button-click="acceptJob(i)"
-    />
+    <Employment v-for="(job, i) of $store.jobOffers" :key="i" v-bind="job" collapse="true" class="my-3" button-text="Accept Job" @button-click="acceptJob(i)" />
 
     <b-btn @click="startJobSearch" block variant="info" :disabled="$store.jobSearching" style="overflow: hidden">
       <transition name="slide" mode="out-in">
@@ -40,6 +32,10 @@ import Employment from '@/components/Tabs/Finances/Employment.vue'
 })
 export default class Work extends Vue {
   mounted() {
+    this.$store.events.$on('start-game', this.startGame)
+  }
+
+  startGame() {
     this.$store.events.$on('tick', this.jobSearchUpdate)
     this.$store.events.$on('jobs-found', this.jobsFound)
   }
@@ -57,6 +53,7 @@ export default class Work extends Vue {
 
     this.$store.jobOffers = []
     this.$store.jobSearchTargetTick = this.$store.tickCount + delay
+    console.log(this.$store.isJobSearching())
   }
 
   jobSearchUpdate() {
@@ -86,31 +83,33 @@ export default class Work extends Vue {
       title: "Resigned from '" + this.$store.job.title + "'",
       text: 'Happy Unemployment!',
     })
-    const work = this.$store.activities.findIndex((act) => { return act.name == 'Work' })
+    const work = this.$store.activities.findIndex((act) => {
+      return act.name == 'Work'
+    })
     this.$store.activities.splice(work)
     this.$store.job = { title: 'Unemployed', wage: 0, hours: 0 }
   }
 
   acceptJob(offer: number) {
     // Check how much free time you have
-    if(this.$store.isEmployed()){
+    if (this.$store.isEmployed()) {
       this.$notify({
         group: 'notification',
-        title: "You are currently employed!",
+        title: 'You are currently employed!',
         text: 'Please resign before accepting a new job!',
       })
-    }else if(this.$store.totalTime() + this.$store.jobOffers[offer].hours > 24){
+    } else if (this.$store.totalTime() + this.$store.jobOffers[offer].hours > 24) {
       this.$notify({
         group: 'notification',
-        title: "You do not have enough time for this job!",
+        title: 'You do not have enough time for this job!',
         text: 'Please allocate more time by reducing time spent on sleeping or luxuries, or choose a different job',
       })
-    }else{
+    } else {
       this.$store.job = this.$store.jobOffers[offer]
       this.$store.jobOffers = []
-      this.$store.income = this.$store.job.wage/12
+      this.$store.income = this.$store.job.wage / 12
 
-      this.$store.activities.push({name:'Work', hours:this.$store.job.hours})
+      this.$store.activities.push({ name: 'Work', hours: this.$store.job.hours })
     }
   }
 }

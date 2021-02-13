@@ -57,17 +57,21 @@ export default class Transport extends Vue {
   private visible: boolean[] = []
 
   mounted() {
-    // Setting the default transport
+    this.$store.events.$on('start-game', this.startGame)
+  }
+
+  startGame() {
+    // add transport activity
+    this.$store.activities.push({ name: 'Transport', hours: this.getTime(this.$store.transports[this.$store.transport].time) })
+
+    // populate visibility array
     this.visible = Array(this.$store.transports.length).fill(false)
     this.visible[this.$store.transport] = true
 
-    // adding it as an activity
-    const roundedTime =
-      Math.round(this.$store.properties[this.$store.property].transportCostModifier * this.$store.transports[this.$store.transport].time * 4) / 4
-    this.$store.activities.push({ name: 'Transport', hours: roundedTime })
-
     this.$store.events.$on('relocate', this.setPrices)
     this.setPrices()
+    this.updateExpense()
+    this.updateActivity()
   }
 
   setPrices() {
@@ -98,12 +102,32 @@ export default class Transport extends Vue {
         title: toBuy.name + ' is too expensive',
         text: 'You cannot afford it. Please save up more money and try again later',
       })
-    } else {
-      this.$store.transports[i].purchased = true
-      this.$store.money -= toBuy.price
-
-      this.$forceUpdate()
+      return
     }
+
+    this.$store.transports[i].purchased = true
+    this.$store.money -= toBuy.price
+
+    this.$forceUpdate()
+  }
+
+  updateExpense() {
+    // create, update or remove the transport expense
+    const transportIndex = this.$store.expenses.findIndex((item) => item.name == 'Transport')
+    const transport = this.$store.transports[this.$store.transport]
+
+    // remove the upkeep expense if there is no upkeep
+    if (transport.upkeep == 0 && transportIndex != -1) this.$store.expenses.splice(transportIndex, 1)
+    // add or update the expense
+    else if (transport.upkeep != 0) {
+      if (transportIndex == -1) this.$store.expenses.push({ name: 'Transport', price: transport.upkeep })
+      else this.$store.expenses[transportIndex].price = transport.upkeep
+    }
+  }
+
+  updateActivity() {
+    const activity = this.$store.activities.find((act) => act.name == 'Transport')!
+    activity.hours = this.$store.transports[this.$store.transport].time
   }
 
   useTransport(i: number) {
@@ -115,32 +139,19 @@ export default class Transport extends Vue {
         title: 'You do not have enough free time to use the ' + toUse.name,
         text: 'Please allocate enough free time and try again later',
       })
-    } else {
-      // Update the transport activity
-      // Note: I only made it default to another transport activity because typescript was flagging as a
-      // possible undefined. When this function runs, it is impossible for it not to find a transport
-      // activity since the walking would have been set by default.
-
-      // Make the transport an expense
-      const transportIndex = this.$store.expenses.findIndex((item) => item.name == 'Transport')
-      if (transportIndex == -1) {
-        this.$store.expenses.push({ name: 'Transport', price: toUse.upkeep })
-      } else {
-        this.$store.expenses[transportIndex].price = toUse.upkeep
-        console.log('Price ', toUse.upkeep)
-      }
-
-      const transport = this.$store.activities.find((act) => {
-        return act.name == 'Transport'
-      }) || { name: 'Transport', hours: 1 }
-      transport.hours = toUse.time
-
-      this.$store.transport = i
-      this.visible.fill(false)
-      this.visible[i] = true
-
-      this.$forceUpdate()
+      return
     }
+
+    // update transport and UI
+    this.$store.transport = i
+    this.visible.fill(false)
+    this.visible[i] = true
+
+    // update activity and expense
+    this.updateExpense()
+    this.updateActivity()
+
+    this.$forceUpdate()
   }
 }
 </script>

@@ -18,20 +18,28 @@ import Work from '@/components/Tabs/Finances/Work.vue'
   components: { ColumnView, Expenses, Stocks, Work },
 })
 export default class Finances extends Vue {
-  relocated() {
-    this.$store.expenses = []
-    this.$store.expenses.push({ name: 'Food', price: 30 * this.$store.currentCountry['water'] + 30 * this.$store.currentCountry['bread'] })
-    this.$store.expenses.push({ name: 'Basic Utilities', price: this.$store.currentCountry['basic'] })
+  mounted() {
+    this.$store.events.$on('start-game', this.startGame)
   }
 
-  mounted() {
-    this.$store.events.$on('relocate', this.relocated)
+  startGame() {
+    this.$store.expenses.push({ name: 'Food', price: 0 })
+    this.$store.expenses.push({ name: 'Basic Utilities', price: 0 })
 
+    this.$store.events.$on('relocate', this.updatePrices)
     this.$store.events.$on('tick-month', this.calculateExpensesAndRevenues)
 
-    // Just for start
-    this.$store.expenses.push({ name: 'Food', price: 30 * this.$store.currentCountry['water'] + 30 * this.$store.currentCountry['bread'] })
-    this.$store.expenses.push({ name: 'Basic Utilities', price: this.$store.currentCountry['basic'] })
+    this.updatePrices()
+  }
+
+  updatePrices() {
+    const update = (expenseName, newPrice) => {
+      const expense = this.$store.expenses.find((expense) => expense.name == expenseName)
+      if (expense) expense.price = newPrice
+    }
+
+    update('Food', 50 * this.$store.currentCountry['water'] + 50 * this.$store.currentCountry['bread'])
+    update('Basic Utilities', this.$store.currentCountry['basic'] * 2)
   }
 
   calculateExpensesAndRevenues() {

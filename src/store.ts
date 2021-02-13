@@ -1,5 +1,5 @@
 import _Vue, { PluginObject } from 'vue'
-import { LUXURIES, PROPERTIES, TRANSPORTS } from './defaults'
+import { LUXURIES, PROPERTIES, STOCKS, TRANSPORTS } from './defaults'
 import countryPrices from '@/assets/countries.json'
 
 export class Store {
@@ -19,10 +19,12 @@ export class Store {
   money: number = 10000
   expenses: Expense[] = []
   income: number = 1000
-  totalExpenses = () => this.expenses.reduce((sum, expense) => sum + expense.price, 0)
+  totalExpenses() {
+    return this.expenses.reduce((sum, expense) => sum + expense.price, 0)
+  }
 
   // Stocks
-  stocks: Stock[] = []
+  stocks: Stock[] = JSON.parse(JSON.stringify(STOCKS))
   risk: number[] = [0.1, 0.2, 0.4]
 
   // Job
@@ -31,29 +33,31 @@ export class Store {
   jobOffers: Job[] = []
   jobSearchDuration: number = 12
   jobSearchTargetTick: number = -1
-  isJobSearching = () => this.jobSearchTargetTick != -1
+  isJobSearching() {
+    return this.jobSearchTargetTick != -1
+  }
 
   // Property
   property: number = 0
-  properties: Property[] = PROPERTIES
+  properties: Property[] = JSON.parse(JSON.stringify(PROPERTIES))
 
   // Time
   activities: Activity[] = []
   sleep: number = 8
-  totalTime = () => {
+  totalTime() {
     return this.activities.reduce((acc, act) => act.hours + acc, 0)
   }
 
   // Transport
   currentTransportTime: number = 0
   transport: number = 0
-  transports: Transport[] = TRANSPORTS
+  transports: Transport[] = JSON.parse(JSON.stringify(TRANSPORTS))
 
   // Luxuries
   luxuryTime: number = 3
   standardLuxuryTime: number = 3
   currentLuxuryHappiness: number = 0
-  luxuries: Luxury[] = LUXURIES
+  luxuries: Luxury[] = JSON.parse(JSON.stringify(LUXURIES))
 
   events: _Vue = new _Vue()
 }

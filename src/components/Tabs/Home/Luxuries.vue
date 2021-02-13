@@ -75,9 +75,13 @@ const LUXURY_ICONS = {
 @Component({})
 export default class Luxuries extends Vue {
   mounted() {
+    this.$store.events.$on('start-game', this.startGame)
+  }
+
+  startGame() {
+    this.$store.activities.push({ name: 'Luxuries', hours: this.$store.luxuryTime })
     this.$store.events.$on('relocate', this.relocated)
 
-    this.$store.activities.push({ name: 'Luxuries', hours: this.$store.luxuryTime })
     this.setPrices()
   }
 

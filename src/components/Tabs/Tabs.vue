@@ -2,8 +2,8 @@
   <div>
     <b-card no-body>
       <b-tabs card>
-        <b-tab title="Leisure" active><Leisure /></b-tab>
-        <b-tab title="Home"><Home /></b-tab>
+        <b-tab title="Leisure"><Leisure /></b-tab>
+        <b-tab title="Home" active><Home /></b-tab>
         <b-tab title="Finances"><Finances /></b-tab>
       </b-tabs>
     </b-card>

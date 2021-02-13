@@ -3,6 +3,12 @@
     <transition name="fade">
       <b-container v-if="visible" class="tools">
         <b-row align-v="center" class="my-3">
+          <b-col cols="4"><h4>Game</h4></b-col>
+          <b-col cols="4"> <b-button block @click="$store.events.$emit('start-game')">Start Game</b-button> </b-col>
+          <b-col cols="4"> <b-button block @click="$store.events.$emit('end-game')">End Game</b-button> </b-col>
+        </b-row>
+
+        <b-row align-v="center" class="my-3">
           <b-col cols="4"><h4>Ticks</h4></b-col>
           <b-col cols="2" class="text-left">{{ this.$store.tickCount }}</b-col>
           <b-col cols="4"> <b-form-input type="number" v-model="ticks"></b-form-input></b-col>
@@ -62,10 +68,6 @@ import { randomEvent } from '@/components/events'
 export default class DevTools extends Vue {
   private ticks: number = 0
   private visible: boolean = false
-
-  mounted() {
-    this.$on('tick', () => console.log('tick'))
-  }
 
   simulateTicks() {
     for (let i = 0; i < this.ticks; i++) this.$store.events.$emit('tick')

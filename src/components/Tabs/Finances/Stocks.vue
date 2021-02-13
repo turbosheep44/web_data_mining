@@ -49,30 +49,11 @@ export default class Stocks extends Vue {
   private visible: boolean[] = []
 
   mounted() {
+    this.$store.events.$on('start-game', this.startGame)
+  }
+
+  startGame() {
     this.$store.events.$on('tick-month', this.updateStocks)
-    this.$store.stocks = [
-      {
-        risk: 'Low',
-        value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        owned: 0,
-        visible: true,
-        invested: 0,
-      },
-      {
-        risk: 'Medium',
-        value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        owned: 0,
-        visible: false,
-        invested: 0,
-      },
-      {
-        risk: 'High',
-        value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        owned: 0,
-        visible: false,
-        invested: 0,
-      },
-    ]
 
     this.visible = Array(this.$store.stocks.length).fill(false)
     this.visible[0] = true

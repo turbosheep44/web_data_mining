@@ -93,7 +93,7 @@ export default class Country extends Vue {
   }
 
   relocate() {
-    console.log(`relocate from ${this.$store.country} to ${this.selectedCountry}`)
+    // console.log(`relocate from ${this.$store.country} to ${this.selectedCountry}`)
     this.$store.money = this.$store.money - 3000
 
     this.$store.country = this.selectedCountry

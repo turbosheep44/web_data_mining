@@ -36,6 +36,10 @@ import { Component, Vue } from 'vue-property-decorator'
 })
 export default class Happiness extends Vue {
   mounted() {
+    this.$store.events.$on('start-game', this.startGame)
+  }
+
+  startGame() {
     // Set the happiness factors initially.
     this.$store.happinessFactors = [
       { name: 'Constant Factor', factor: this.$store.constantHappinessDecay, description: 'Happiness will always decrase by this much every month.' },

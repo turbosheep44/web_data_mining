@@ -45,16 +45,20 @@ export default class ActivityList extends Vue {
   private maxEnjoyment = [94, 185, 94]
   private minEnjoyment = [27, 37, 85]
 
+  mounted() {
+    this.$store.events.$on('start-game', this.startGame)
+    this.progressBarColour()
+  }
+
+  startGame() {
+    this.$store.events.$on('relocate', this.relocate)
+    this.$store.events.$on('tick-month', this.refill)
+  }
+
   refill() {
     if (this.enjoyment < 0.1) this.enjoyment += 0.2
     else if (this.enjoyment < 0.5) this.enjoyment += 0.4
     else this.enjoyment = 1
-  }
-
-  mounted() {
-    this.$store.events.$on('relocate', this.relocate)
-    this.$store.events.$on('tick-month', this.refill)
-    this.progressBarColour()
   }
 
   purchase(i: number) {
@@ -69,17 +73,17 @@ export default class ActivityList extends Vue {
       return
     }
 
+    // charge money and restore happiness
     this.$store.money -= this.activities[i].cost
-    const old = this.enjoyment
-
     this.$store.happiness += (this.activities[i].happiness / 100) * this.enjoyment
+    this.$store.happiness = Math.min(1, this.$store.happiness)
 
     // decay enjoyment value
     if (this.enjoyment == 1) this.enjoyment = 0.95
     this.enjoyment = Math.pow(this.enjoyment, 2)
     if (this.enjoyment < 0.1) this.enjoyment = 0
 
-    console.log(`${this.activities[i].name}     ${old.toFixed(2)} --> ${this.enjoyment.toFixed(2)}`)
+    // console.log(`${this.activities[i].name}     ${old.toFixed(2)} --> ${this.enjoyment.toFixed(2)}`)
   }
 
   relocate() {

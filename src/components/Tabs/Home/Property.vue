@@ -49,12 +49,30 @@ export default class Property extends Vue {
   private visible: boolean[] = []
 
   mounted() {
+    this.$store.events.$on('start-game', this.startGame)
+  }
+
+  startGame() {
     this.visible = Array(this.$store.properties.length).fill(false)
-
     this.$store.events.$on('relocate', this.relocated)
-
     this.setPrices()
-    this.$store.expenses.push({ name: 'Rent', price: this.$store.properties[0].price })
+
+    // start with the mose basic property
+    this.$store.property = 0
+    this.updateExpense()
+  }
+
+  updateExpense() {
+    const rentIndex = this.$store.expenses.findIndex((expense) => expense.name == 'Rent')
+    const ownedProperty = this.$store.properties[this.$store.property]
+
+    // remove the rent expense if the property is not a rental
+    if (!ownedProperty.isRent && rentIndex != -1) this.$store.expenses.splice(rentIndex, 1)
+    // add or update the expense
+    else if (ownedProperty.isRent) {
+      if (rentIndex == -1) this.$store.expenses.push({ name: 'Rent', price: ownedProperty.price })
+      else this.$store.expenses[rentIndex].price = ownedProperty.price
+    }
   }
 
   setPrices() {
@@ -90,6 +108,7 @@ export default class Property extends Vue {
   }
 
   purchaseProperty(p: number) {
+    // check the player can afford the property
     const prop = this.$store.properties[p]
     if (prop.price > this.$store.money) {
       this.$notify({
@@ -97,40 +116,39 @@ export default class Property extends Vue {
         title: prop.name + ' is too expensive',
         text: 'You cannot afford it. Please save up more money and try again later',
       })
-    } else {
-      const currentTransport = this.$store.transports[this.$store.transport]
-      const proposedTransport = Math.round(currentTransport.time * prop.transportCostModifier * 4) / 4
-      const freeTime = 24 - this.$store.totalTime()
-      if (freeTime - currentTransport.time + proposedTransport <= 0) {
-        this.$notify({
-          group: 'notification',
-          title: prop.name + ' is too far away from work to fit into your schedule',
-          text: 'Allocate more free time and you will be able to purchase this property',
-        })
-      } else {
-        this.$store.property = p
-        this.visible.fill(false)
-        this.visible[p] = true
-
-        this.$notify({
-          group: 'notification',
-          title: prop.name + ' purchased!',
-          text: 'Congratulations on purchasing this new property!',
-        })
-
-        // update or remove cost of rent
-        const rentIndex = this.$store.expenses.findIndex((expense) => expense.name == 'Rent')
-        if (prop.isRent) {
-          if (rentIndex != -1) this.$store.expenses[rentIndex].price = prop.price
-          else this.$store.expenses.push({ name: 'Rent', price: prop.price })
-        } else if (rentIndex != -1) {
-          this.$store.expenses.splice(rentIndex, 1)
-        }
-
-        const transportIndex = this.$store.activities.findIndex((activity) => activity.name == 'Transport')
-        this.$store.activities[transportIndex].hours = proposedTransport
-      }
+      return
     }
+
+    // check the player has enough time for their new transport
+    const currentTransport = this.$store.transports[this.$store.transport]
+    const proposedTransport = Math.round(currentTransport.time * prop.transportCostModifier * 4) / 4
+    const freeTime = 24 - this.$store.totalTime()
+    if (freeTime - currentTransport.time + proposedTransport <= 0) {
+      this.$notify({
+        group: 'notification',
+        title: prop.name + ' is too far away from work to fit into your schedule',
+        text: 'Allocate more free time and you will be able to purchase this property',
+      })
+      return
+    }
+
+    // update the property and collapse UI
+    this.$store.property = p
+    this.visible.fill(false)
+    this.visible[p] = true
+
+    this.$notify({
+      group: 'notification',
+      title: prop.name + ' purchased!',
+      text: 'Congratulations on purchasing this new property!',
+    })
+
+    // update or remove cost of rent
+    this.updateExpense()
+
+    // update transport time
+    const transportIndex = this.$store.activities.findIndex((activity) => activity.name == 'Transport')
+    this.$store.activities[transportIndex].hours = proposedTransport
   }
 }
 </script>
