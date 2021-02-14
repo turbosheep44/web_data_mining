@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h5 class="text-center">Stocks</h5>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div></div>
+      <h5 class="text-center">Stocks</h5>
+      <font-awesome-icon icon="info-circle" class="mr-3" id="info-stocks"></font-awesome-icon>
+      <b-tooltip placement="bottom" target="info-stocks"> Learn more about investing in stocks. </b-tooltip>
+    </div>
     <hr class="wide-separator" />
 
     <b-card v-for="(stock, i) in stocks()" :key="i" no-body class="my-3">
