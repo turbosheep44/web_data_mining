@@ -52,7 +52,7 @@ export const PROPERTIES = [
 export const LUXURIES = [
   {
     name: 'Television',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description: 'Watching some good old telly is never boring!',
     tier: 0,
     baseHappiness: 5,
     currentHappiness: 0,
@@ -61,7 +61,7 @@ export const LUXURIES = [
   },
   {
     name: 'Pool',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description: "Who doesn't like to go swimming?",
     tier: 0,
     baseHappiness: 5,
     currentHappiness: 0,
@@ -70,7 +70,7 @@ export const LUXURIES = [
   },
   {
     name: 'Computer',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description: 'These days a personal computer is a necessity.',
     tier: 0,
     baseHappiness: 5,
     currentHappiness: 0,
@@ -79,7 +79,7 @@ export const LUXURIES = [
   },
   {
     name: 'Air Conditioning',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description: 'Nobody likes to feel colder or hotter than usual...',
     tier: 0,
     baseHappiness: 5,
     currentHappiness: 0,
@@ -88,7 +88,7 @@ export const LUXURIES = [
   },
   {
     name: 'Coffee Machine',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description: 'To better wake you up in the morning.',
     tier: 0,
     baseHappiness: 5,
     currentHappiness: 0,
