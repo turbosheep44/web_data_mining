@@ -83,7 +83,7 @@ export default class Game extends Vue {
 
   checkGameOver() {
     // game over when no money remains
-    if (this.$store.money > 0) return
+    if (this.$store.money > 0 && this.$store.tickCount < (65 - 18) * 12 * 4) return
 
     this.$store.events.$emit('end-game')
     this.gameOver = true
