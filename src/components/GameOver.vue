@@ -4,8 +4,8 @@
       <div class="emitter" ref="emitter">
         <img src="@/assets/game_over.png" class="w-100" />
       </div>
-      <h3 class="text-center" v-if="$store.money <= 0">You went bankrupt!</h3>
-      <h3 class="text-center" v-else>You ended the game with {{ pension() | money(true, true) }} per month for your retirement.</h3>
+      <h5 class="text-center" v-if="$store.money <= 0">You went bankrupt!</h5>
+      <h5 class="text-center" v-else>You ended the game with {{ pension() | money(true, true) }} per month for your retirement.</h5>
       <hr />
       <div class="d-flex justify-content-center align-items-center">
         <b-button variant="outline-dark" class="px-5 mx-2" @click="restart"> Restart </b-button>
