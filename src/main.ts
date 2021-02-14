@@ -20,10 +20,10 @@ import { library, dom } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faHryvnia, faSmile, faCalendar, faUser, faChevronDown, faHome, faBuilding, faBicycle } from '@fortawesome/free-solid-svg-icons'
 import { faClock, faTv, faSwimmingPool, faCoffee, faLaptop, faFan, faFilm, faGamepad, faShoppingBag } from '@fortawesome/free-solid-svg-icons'
-import { faHamburger, faUtensils, faConciergeBell, faFutbol, faTableTennis, faDumbbell, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faHamburger, faUtensils, faConciergeBell, faFutbol, faTableTennis, faDumbbell, faPlus, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 library.add(faHryvnia, faSmile, faCalendar, faUser, faChevronDown, faHome, faBuilding, faBicycle)
 library.add(faClock, faTv, faSwimmingPool, faCoffee, faLaptop, faFan, faFilm, faGamepad, faShoppingBag)
-library.add(faHamburger, faUtensils, faConciergeBell, faFutbol, faTableTennis, faDumbbell, faPlus)
+library.add(faHamburger, faUtensils, faConciergeBell, faFutbol, faTableTennis, faDumbbell, faPlus, faInfoCircle)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 dom.watch()
 

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h5 class="text-center mt-3">Property</h5>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div></div>
+      <h5 class="text-center">Property</h5>
+      <font-awesome-icon icon="info-circle" class="mr-3" id="info-property"></font-awesome-icon>
+      <b-tooltip placement="bottom" target="info-property"> Learn more about investing in property. </b-tooltip>
+    </div>
     <hr class="wide-separator" />
 
     <b-card v-for="(property, i) in $store.properties" :key="`property-${i}`" no-body :class="['my-3', i == $store.property ? 'owned-property' : '']">
