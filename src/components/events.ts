@@ -33,9 +33,10 @@ const FIRED = new Event({
   checkPrerequisites: ($store: Store) => $store.isEmployed(), // must be employed
   effects: { happiness: -10 },
   callback($store: Store) {
-    $store.job = { title: 'Unemployed', wage: 0, hours: 0 }
-    const workActivity = $store.activities.findIndex(act => act.name == 'Work')
-    $store.activities.splice(workActivity, 1)
+    console.log('nothing')
+    // $store.job = { title: 'Unemployed', wage: 0, hours: 0 }
+    // const workActivity = $store.activities.findIndex(act => act.name == 'Work')
+    // $store.activities.splice(workActivity, 1)
   },
   isBarrierDismissable: true,
 })

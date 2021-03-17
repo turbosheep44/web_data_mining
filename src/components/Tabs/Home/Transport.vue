@@ -91,6 +91,7 @@ export default class Transport extends Vue {
   getTime(transportTime: number) {
     const time = this.$store.properties[this.$store.property].transportCostModifier * transportTime
     const rounded = Math.round(time * 4) / 4
+    console.log(rounded)
     return rounded
   }
 
@@ -126,8 +127,14 @@ export default class Transport extends Vue {
   }
 
   updateActivity() {
+    const time = this.$store.properties[this.$store.property].transportCostModifier * this.$store.transports[this.$store.transport].time
+    const rounded = Math.round(time * 4) / 4
     const activity = this.$store.activities.find((act) => act.name == 'Transport')!
-    activity.hours = this.$store.transports[this.$store.transport].time
+    activity.hours = time
+    
+    
+    console.log(rounded)
+    return rounded
   }
 
   useTransport(i: number) {
